@@ -20,6 +20,7 @@ Existing screen time tools are private & passive, so they don’t tap into the m
 
 **Phase 3: Sending Flares**
 > The second core feature we wanted to highlight in our prototype was the flare system. A user can walk through this process by going from screen b to d, using the fire button seen in the nav bar. Within the flare screen, the user has access to try many features and buttons– namely, sending out flares and viewing flares their friends/groups sent out. 
+
 > *flares are essentially a ping you send to your friends that indicate you are looking for a body double or study buddy*
 
 # Usage
