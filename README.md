@@ -1,5 +1,7 @@
 # Flare Up
 
+![image](https://github.com/user-attachments/assets/d7dade1a-7f4d-4db8-9b96-842136be17a1)
+
 ## Problem Statement
 College students and independent workers struggle to sustain deep focused work due to a lack of accountability & distracting habits.
 Existing screen time tools are private & passive, so they don’t tap into the motivating power of peer accountability or friendly competition.
