@@ -1,6 +1,6 @@
 # Flare Up
 
-![image](https://github.com/user-attachments/assets/d7dade1a-7f4d-4db8-9b96-842136be17a1)
+![image](https://github.com/user-attachments/assets/606ed570-b33e-483a-82d3-874b3f937337)
 
 ## Problem Statement
 College students and independent workers struggle to sustain deep focused work due to a lack of accountability & distracting habits.
