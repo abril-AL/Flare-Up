@@ -1,31 +1,30 @@
 const express = require('express');
 const cors = require('cors');
-const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
-console.log(process.env.SUPABASE_URL)
-console.log(process.env.SUPABASE_ANON_KEY)
-
 const app = express();
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
-);
+app.use(cors());
+app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Express-Supabase API is running.' });
+// Add this here
+app.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.originalUrl}`);
+  if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
+    console.log('Body:', req.body);
+  }
+  next();
 });
 
-// Example endpoint: Fetch data from Supabase
-app.get('/users', async (req, res) => {
-  const { data, error } = await supabase.from('users').select('*');
-  if (error) return res.status(400).json({ error });
-  res.json({ data });
-});
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+// Load routes
+//app.use('/users', require('./routes/users'));
+app.use('/friends', require('./routes/friends'));
+//app.use('/groups', require('./routes/groups'));
+
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
