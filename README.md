@@ -31,7 +31,11 @@ To start the supabase backend server:
 ```
 cd ./backend
 node index.js
+
 ```
+
+# Frontend
+The frontend is only accessible through XCode, so please proceed with a Mac. To go through the project, run the project on XCode, and an iPhone screen will pop up. This is the sign in page. As we assume that you don't have an account in FlareUp, proceed to the Home page file, where you will see how our Homepage looks like and can interact with it! 
 
 # Credits
 
