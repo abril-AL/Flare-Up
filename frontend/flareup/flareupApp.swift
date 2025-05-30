@@ -9,18 +9,10 @@
 import SwiftUI
 
 @main
-struct FlareupApp: App {
-    // 1. A @State flag to know when to hide the splash
-    @State private var showSplash = true
-
+struct flareupApp: App {
     var body: some Scene {
         WindowGroup {
-            // 2. Conditionally show either SplashView or your real ContentView
-            if showSplash {
-                SplashView(isActive: $showSplash)
-            } else {
-                LoginView()
-            }
+            MainView()
         }
     }
 }

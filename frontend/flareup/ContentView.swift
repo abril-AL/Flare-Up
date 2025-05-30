@@ -1,28 +1,33 @@
-//
-//  ContentView.swift
-//  flareup
-//
-//  Created by Richelle Shim on 5/9/25.
-//
-
 import SwiftUI
-
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Text("Knock, knock!")
-                .padding()
-                .background(Color.yellow, in: RoundedRectangle(cornerRadius: 8))
-            Text("Who's there?")
-                .padding()
-                .background(Color.teal, in: RoundedRectangle(cornerRadius: 8))
+        TabView {
+            HomeView()
+                .tabItem {
+                    Image(systemName: "house")
+                }
+
+            FocusView()
+                .tabItem {
+                    Image(systemName: "star")
+                }
+
+            StatsView()
+                .tabItem {
+                    Image(systemName: "person.2")
+                }
+
+            ProfileView()
+                .tabItem {
+                    Image(systemName: "person.crop.circle.fill")
+                }
         }
-        .padding()
+        .accentColor(.orange) // Highlight color for selected tab
     }
 }
-
 
 #Preview {
     ContentView()
 }
+
