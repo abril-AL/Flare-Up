@@ -1,0 +1,40 @@
+# Node dependencies
+/node_modules/
+
+# Environment variables
+.env
+.env.*
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Build artifacts (optional, if using dist or build folder)
+dist/
+build/
+
+# IDE files
+.vscode/
+.idea/
+
+# Optional: macOS system files
+.AppleDouble
+.LSOverride
+
+# Optional: coverage reports, if using test frameworks
+coverage/
+
+# Optional: package manager artifacts
+package-lock.json.*
+yarn.lock.*

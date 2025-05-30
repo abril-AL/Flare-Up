@@ -1,0 +1,11 @@
+{
+  "": {
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUpTests.build/master.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Tests/FlareUpTests/flareupTests.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUpTests.build/flareupTests.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUpTests.build/flareupTests.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUpTests.build/flareupTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUpTests.build/flareupTests.swiftdeps"
+  }
+}

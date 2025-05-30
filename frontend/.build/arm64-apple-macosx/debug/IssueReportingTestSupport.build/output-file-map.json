@@ -1,0 +1,17 @@
+{
+  "": {
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/IssueReportingTestSupport.build/master.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/checkouts/xctest-dynamic-overlay/Sources/IssueReportingTestSupport/SwiftTesting.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/IssueReportingTestSupport.build/SwiftTesting.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/IssueReportingTestSupport.build/SwiftTesting.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/IssueReportingTestSupport.build/SwiftTesting~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/IssueReportingTestSupport.build/SwiftTesting.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/checkouts/xctest-dynamic-overlay/Sources/IssueReportingTestSupport/XCTest.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/IssueReportingTestSupport.build/XCTest.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/IssueReportingTestSupport.build/XCTest.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/IssueReportingTestSupport.build/XCTest~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/IssueReportingTestSupport.build/XCTest.swiftdeps"
+  }
+}

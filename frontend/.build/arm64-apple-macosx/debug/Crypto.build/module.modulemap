@@ -1,0 +1,4 @@
+module Crypto {
+    header "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Crypto.build/Crypto-Swift.h"
+    requires objc
+}

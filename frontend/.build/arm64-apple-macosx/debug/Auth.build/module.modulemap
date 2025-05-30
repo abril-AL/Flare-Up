@@ -1,0 +1,4 @@
+module Auth {
+    header "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Auth.build/Auth-Swift.h"
+    requires objc
+}

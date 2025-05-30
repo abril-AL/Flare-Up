@@ -1,0 +1,4 @@
+module PostgREST {
+    header "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/PostgREST.build/PostgREST-Swift.h"
+    requires objc
+}

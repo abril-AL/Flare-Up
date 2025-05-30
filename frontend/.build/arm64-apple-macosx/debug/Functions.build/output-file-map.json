@@ -1,0 +1,17 @@
+{
+  "": {
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Functions.build/master.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/checkouts/supabase-swift/Sources/Functions/FunctionsClient.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Functions.build/FunctionsClient.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Functions.build/FunctionsClient.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Functions.build/FunctionsClient~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Functions.build/FunctionsClient.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/checkouts/supabase-swift/Sources/Functions/Types.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Functions.build/Types.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Functions.build/Types.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Functions.build/Types~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Functions.build/Types.swiftdeps"
+  }
+}

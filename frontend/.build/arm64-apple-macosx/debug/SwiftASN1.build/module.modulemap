@@ -1,0 +1,4 @@
+module SwiftASN1 {
+    header "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/SwiftASN1.build/SwiftASN1-Swift.h"
+    requires objc
+}

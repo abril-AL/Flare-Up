@@ -1,0 +1,4 @@
+module Supabase {
+    header "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Supabase.build/Supabase-Swift.h"
+    requires objc
+}

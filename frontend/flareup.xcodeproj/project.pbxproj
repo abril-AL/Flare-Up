@@ -91,6 +91,7 @@
 				FBADBE5F2DCE9215009EA124 /* flareup */,
 				FBADBE6D2DCE9216009EA124 /* flareupTests */,
 				FBADBE772DCE9216009EA124 /* flareupUITests */,
+				FBEC78B32DEA4A1100311981 /* Frameworks */,
 				FBADBE5E2DCE9215009EA124 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -103,6 +104,13 @@
 				FBADBE742DCE9216009EA124 /* flareupUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		FBEC78B32DEA4A1100311981 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,6 +219,12 @@
 			);
 			mainGroup = FBADBE542DCE9215009EA124;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FB4B9C9E2DEA43B900DC90E8 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+				FB4B9CA82DEA448100DC90E8 /* XCLocalSwiftPackageReference "../frontend" */,
+				FB4B9CA92DEA452600DC90E8 /* XCLocalSwiftPackageReference "flareup" */,
+				FBEC78B22DEA4A0A00311981 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FBADBE5E2DCE9215009EA124 /* Products */;
 			projectDirPath = "";
@@ -574,6 +588,36 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		FB4B9CA82DEA448100DC90E8 /* XCLocalSwiftPackageReference "../frontend" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../frontend;
+		};
+		FB4B9CA92DEA452600DC90E8 /* XCLocalSwiftPackageReference "flareup" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = flareup;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FB4B9C9E2DEA43B900DC90E8 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.1;
+			};
+		};
+		FBEC78B22DEA4A0A00311981 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = FBADBE552DCE9215009EA124 /* Project object */;
 }

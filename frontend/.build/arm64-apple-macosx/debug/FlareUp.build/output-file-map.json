@@ -1,0 +1,197 @@
+{
+  "": {
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/master.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/AllFriendsView.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/AllFriendsView.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/AllFriendsView.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/AllFriendsView~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/AllFriendsView.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/ContentView.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ContentView.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ContentView.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ContentView~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ContentView.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/CountdownViewModel.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/CountdownViewModel.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/CountdownViewModel.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/CountdownViewModel~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/CountdownViewModel.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/FlareupHeader.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FlareupHeader.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FlareupHeader.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FlareupHeader~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FlareupHeader.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/FocusVIew.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FocusVIew.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FocusVIew.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FocusVIew~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FocusVIew.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/GroupDetailView.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/GroupDetailView.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/GroupDetailView.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/GroupDetailView~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/GroupDetailView.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/HomeView.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/HomeView.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/HomeView.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/HomeView~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/HomeView.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/LoginView.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/LoginView.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/LoginView.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/LoginView~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/LoginView.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/MainView.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/MainView.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/MainView.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/MainView~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/MainView.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/Models/Group.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/Group.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/Group.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/Group~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/Group.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/Models/User.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/User.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/User.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/User~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/User.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/Networking/APIEnvironment.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/APIEnvironment.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/APIEnvironment.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/APIEnvironment~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/APIEnvironment.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/Networking/NetworkError.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/NetworkError.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/NetworkError.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/NetworkError~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/NetworkError.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/Networking/NetworkManager.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/NetworkManager.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/NetworkManager.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/NetworkManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/NetworkManager.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/ProfileView.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ProfileView.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ProfileView.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ProfileView~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ProfileView.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/Services/DeviceActivityMonitor.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/DeviceActivityMonitor.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/DeviceActivityMonitor.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/DeviceActivityMonitor~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/DeviceActivityMonitor.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/Services/FlareService.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FlareService.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FlareService.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FlareService~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FlareService.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/Services/GroupService.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/GroupService.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/GroupService.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/GroupService~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/GroupService.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/Services/NotificationService.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/NotificationService.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/NotificationService.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/NotificationService~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/NotificationService.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/Services/ScreenTimeService.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ScreenTimeService.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ScreenTimeService.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ScreenTimeService~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ScreenTimeService.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/Services/SupabaseClient.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SupabaseClient.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SupabaseClient.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SupabaseClient~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SupabaseClient.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/Services/UserService.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/UserService.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/UserService.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/UserService~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/UserService.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/SignUpView.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SignUpView.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SignUpView.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SignUpView~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SignUpView.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/SocialView.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SocialView.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SocialView.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SocialView~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SocialView.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/Sources/AuthService.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/AuthService.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/AuthService.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/AuthService~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/AuthService.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/SplashView.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SplashView.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SplashView.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SplashView~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/SplashView.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/StatsView.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/StatsView.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/StatsView.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/StatsView~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/StatsView.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/ViewExtension.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ViewExtension.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ViewExtension.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ViewExtension~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/ViewExtension.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/ViewModels/AuthViewModel.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/AuthViewModel.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/AuthViewModel.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/AuthViewModel~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/AuthViewModel.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/ViewModels/FlareViewModel.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FlareViewModel.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FlareViewModel.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FlareViewModel~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/FlareViewModel.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/ViewModels/UserViewModel.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/UserViewModel.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/UserViewModel.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/UserViewModel~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/UserViewModel.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/Sources/FlareUp/flareupApp.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/flareupApp.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/flareupApp.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/flareupApp~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUp.build/flareupApp.swiftdeps"
+  }
+}

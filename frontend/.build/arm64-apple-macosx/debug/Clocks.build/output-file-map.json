@@ -1,0 +1,53 @@
+{
+  "": {
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/master.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/checkouts/swift-clocks/Sources/Clocks/AnyClock.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/AnyClock.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/AnyClock.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/AnyClock~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/AnyClock.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/checkouts/swift-clocks/Sources/Clocks/ImmediateClock.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/ImmediateClock.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/ImmediateClock.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/ImmediateClock~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/ImmediateClock.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/checkouts/swift-clocks/Sources/Clocks/Internal/Lock.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/Lock.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/Lock.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/Lock~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/Lock.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/checkouts/swift-clocks/Sources/Clocks/Internal/_AsyncTimerSequence.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/_AsyncTimerSequence.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/_AsyncTimerSequence.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/_AsyncTimerSequence~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/_AsyncTimerSequence.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/checkouts/swift-clocks/Sources/Clocks/SwiftUI.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/SwiftUI.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/SwiftUI.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/SwiftUI~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/SwiftUI.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/checkouts/swift-clocks/Sources/Clocks/TestClock.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/TestClock.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/TestClock.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/TestClock~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/TestClock.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/checkouts/swift-clocks/Sources/Clocks/Timer.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/Timer.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/Timer.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/Timer~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/Timer.swiftdeps"
+  },
+  "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/checkouts/swift-clocks/Sources/Clocks/UnimplementedClock.swift": {
+    "dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/UnimplementedClock.d",
+    "object": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/UnimplementedClock.swift.o",
+    "swiftmodule": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/UnimplementedClock~partial.swiftmodule",
+    "swift-dependencies": "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Clocks.build/UnimplementedClock.swiftdeps"
+  }
+}

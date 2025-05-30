@@ -1,0 +1,4 @@
+module FlareUpPackageTests {
+    header "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/FlareUpPackageTests.build/FlareUpPackageTests-Swift.h"
+    requires objc
+}

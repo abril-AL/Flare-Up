@@ -1,0 +1,4 @@
+module Storage {
+    header "/Users/richelleshim/new-flareUp/Flare-Up/frontend/.build/arm64-apple-macosx/debug/Storage.build/Storage-Swift.h"
+    requires objc
+}
