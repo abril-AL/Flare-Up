@@ -9,10 +9,14 @@
 import SwiftUI
 
 @main
-struct flareupApp: App {
+struct FlareupApp: App {
+    @StateObject private var session = SessionViewModel()
+
     var body: some Scene {
         WindowGroup {
-            LoginView()
+            RootView()
+                .environmentObject(session)
         }
     }
 }
+

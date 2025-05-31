@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct LoginView: View {
+    @EnvironmentObject var session: SessionViewModel
     @State private var email = ""
     @State private var password = ""
 
@@ -109,16 +110,7 @@ struct LoginView: View {
                     // Login button
                     Button {
                         Task {
-                            do {
-                                let session = try await SupabaseManager.shared.client.auth.signIn(
-                                    email: email,
-                                    password: password
-                                )
-                                print("Login successful! User ID: \(session.user.id)")
-                                // You can now navigate or store session info
-                            } catch {
-                                print("Login failed: \(error.localizedDescription)")
-                            }
+                            await session.login(email: email, password: password)
                         }
                     } label: {
                         Text("Login")
