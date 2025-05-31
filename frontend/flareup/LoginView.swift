@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct LoginView: View {
+    @EnvironmentObject var session: SessionViewModel
     @State private var email = ""
     @State private var password = ""
 
@@ -34,6 +35,9 @@ struct LoginView: View {
                             .foregroundColor(.gray)
 
                         TextField("eunice @g.com", text: $email)
+                            .textInputAutocapitalization(.never)
+                            .keyboardType(.emailAddress)
+                            .autocorrectionDisabled(true)
                             .font(.custom("Poppins-Regular", size: 15))
                             .foregroundColor(
                                 Color(red: 0.1, green: 0.1, blue: 0.1)
@@ -58,6 +62,8 @@ struct LoginView: View {
                             .foregroundColor(.gray)
 
                         SecureField("********", text: $password)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled(true)
                             .font(.custom("Poppins-Regular", size: 15))
                             .foregroundColor(
                                 Color(red: 0.1, green: 0.1, blue: 0.1)
@@ -103,7 +109,9 @@ struct LoginView: View {
 
                     // Login button
                     Button {
-                        // login action
+                        Task {
+                            await session.login(email: email, password: password)
+                        }
                     } label: {
                         Text("Login")
                             .font(.title2)

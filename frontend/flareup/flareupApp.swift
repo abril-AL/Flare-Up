@@ -9,10 +9,17 @@
 import SwiftUI
 
 @main
-struct flareupApp: App {
+struct FlareupApp: App {
+    @StateObject private var session = SessionViewModel()
+
     var body: some Scene {
         WindowGroup {
-            MainView()
+            RootView()
+                .environmentObject(session)
+                .task {
+                    await session.loadSession()
+                }
         }
     }
 }
+
