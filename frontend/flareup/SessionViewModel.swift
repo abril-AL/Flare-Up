@@ -29,5 +29,18 @@ class SessionViewModel: ObservableObject {
             print("Logout failed: \(error.localizedDescription)")
         }
     }
+    
+    func loadSession() async {
+        do {
+            let session = try await SupabaseManager.shared.client.auth.session
+            let user = session.user
+            self.userID = user.id.uuidString
+            self.isAuthenticated = true
+            print("✅ Session restored for user: \(user.id)")
+        } catch {
+            print("Failed to load session: \(error.localizedDescription)")
+        }
+    }
+
 }
 

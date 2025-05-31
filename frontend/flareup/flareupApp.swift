@@ -16,6 +16,9 @@ struct FlareupApp: App {
         WindowGroup {
             RootView()
                 .environmentObject(session)
+                .task {
+                    await session.loadSession()
+                }
         }
     }
 }
