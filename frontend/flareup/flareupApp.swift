@@ -12,7 +12,7 @@ import SwiftUI
 struct flareupApp: App {
     var body: some Scene {
         WindowGroup {
-            MainView()
+            LoginView()
         }
     }
 }
