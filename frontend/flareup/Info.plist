@@ -2,10 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>GOOGLE_CLOUD_VISION_API_KEY</key>
+	<string></string>
 	<key>SUPABASE_ANON_KEY</key>
-	<string>$(SUPABASE_ANON_KEY)</string>
+	<string>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlanF3d2p6bHB3eHNkcm9obGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4MTc3MTQsImV4cCI6MjA2MjM5MzcxNH0.vwVppZfEU9quJWlAS_j4JlRLVg3Uc_eaWs9cF43ACHk</string>
 	<key>SUPABASE_URL</key>
-	<string>$(SUPABASE_URL)</string>
+	<string>https://lejqwwjzlpwxsdrohllq.supabase.co</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins-Regular.ttf</string>
@@ -17,5 +19,7 @@
 	<array>
 		<string>Intent</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to your photo library to scan screen time screenshots.</string>
 </dict>
 </plist>

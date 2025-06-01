@@ -4,6 +4,7 @@ struct LoginView: View {
     @EnvironmentObject var session: SessionViewModel
     @State private var email = ""
     @State private var password = ""
+    @State private var showAlert = false
 
     var body: some View {
         ZStack {
@@ -11,7 +12,6 @@ struct LoginView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 10) {
-
                 HStack {
                     Image("ThinkingLogo")
                         .resizable()
@@ -57,17 +57,13 @@ struct LoginView: View {
                     .padding(.horizontal, 28)
 
                     HStack(spacing: 12) {
-                        Image("LogInLock")
-                            .renderingMode(.template)
+                        Image(systemName: "lock")
                             .foregroundColor(.gray)
 
-                        SecureField("********", text: $password)
+                        SecureField("Password", text: $password)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled(true)
                             .font(.custom("Poppins-Regular", size: 15))
-                            .foregroundColor(
-                                Color(red: 0.1, green: 0.1, blue: 0.1)
-                            )
                     }
                     .padding(.leading, 16)
                     .frame(height: 56)
@@ -108,24 +104,18 @@ struct LoginView: View {
                     .padding(.horizontal, 28)
 
                     // Login button
-                    Button {
+                    Button(action: {
                         Task {
-                            await session.login(email: email, password: password)
+                            await handleSignIn()
                         }
-                    } label: {
-                        Text("Login")
-                            .font(.title2)
-                            .fontWeight(.medium)
-                
-                        
-                          .multilineTextAlignment(.trailing)
-                          .foregroundColor(Color("LightComponent"))
+                    }) {
+                        Text("Sign In")
+                            .font(.custom("Poppins-SemiBold", size: 15))
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .frame(height: 56)
                             .background(Color("AccentRed"))
                             .cornerRadius(28)
-                        
                     }
                     .padding(.horizontal, 28)
                     
@@ -200,6 +190,21 @@ struct LoginView: View {
             .padding(.top, 26)
 
         }
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text("Error"),
+                message: Text(session.errorMessage ?? "An unknown error occurred"),
+                dismissButton: .default(Text("OK"))
+            )
+        }
+    }
+    
+    private func handleSignIn() async {
+        do {
+            try await session.signIn(email: email, password: password)
+        } catch {
+            showAlert = true
+        }
     }
 }
 
@@ -209,4 +214,3 @@ struct LoginView_Previews: PreviewProvider {
         LoginView()
     }
 }
-

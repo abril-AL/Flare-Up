@@ -1,4 +1,4 @@
-const supabase = require('../supabase');
+const { supabase } = require('../utils/supabase');
 
 // Send a friend request from sender_id to receiver_id
 exports.sendFriendRequest = async (req, res) => {

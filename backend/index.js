@@ -18,13 +18,23 @@ app.use((req, res, next) => {
   next();
 });
 
-
 // Load routes
-//app.use('/users', require('./routes/users'));
+app.use('/auth', require('./routes/authRoutes'));
 app.use('/friends', require('./routes/friends'));
+app.use('/screentime', require('./routes/screentimeRoutes'));
+const userRoutes = require('./routes/users');
+app.use('/users', userRoutes);
+
 //app.use('/groups', require('./routes/groups'));
+
+app.listen(4000, '0.0.0.0', () => {
+  console.log('Server running on port 4000');
+});
+
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+

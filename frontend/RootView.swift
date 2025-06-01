@@ -2,14 +2,6 @@
 //  RootView.swift
 //  flareup
 //
-//  Created by Richelle Shim on 5/31/25.
-//
-
-
-//
-//  RootView.swift
-//  flareup
-//
 //  Created by Dalton Silverman on 5/31/25.
 //
 
