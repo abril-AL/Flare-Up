@@ -6,7 +6,8 @@ const {
   removeFriend,
   declineFriendRequest,
   getFriends,
-  getFriendRequests
+  getFriendRequests,
+  getRankedFriends,
 } = require('../controllers/friendsController');
 
 router.post('/request', sendFriendRequest);

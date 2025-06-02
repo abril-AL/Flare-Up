@@ -153,30 +153,46 @@ exports.getFriendRequests = async (req, res) => {
   }
 };
 
-
+// controllers/friendsController.js
 exports.getRankedFriends = async (req, res) => {
   const { userId } = req.params;
+
   try {
     const { data, error } = await supabase
       .from('friends')
-      .select('friend_id, users(name, profile_picture, curr_period_screentime)')
-      .eq('user_id', userId)
-      .order('users.curr_period_screentime', { ascending: true });
+      .select(`
+        friend_id,
+        friend:friend_id (
+          name,
+          profile_picture,
+          curr_drop_screentime
+        )
+      `)
+      .eq('user_id', userId);
 
     if (error) throw error;
 
-    const friends = data.map((entry, index) => ({
+    const sortedFriends = data
+      .filter(entry => entry.friend !== null)
+      .sort((a, b) => (a.friend.curr_drop_screentime ?? 0) - (b.friend.curr_drop_screentime ?? 0));
+
+    const friends = sortedFriends.map((entry, index) => ({
       id: entry.friend_id,
       rank: index + 1,
-      name: entry.users.name,
-      hours: entry.users.curr_period_screentime,
-      imageName: entry.users.profile_picture
+      name: entry.friend.name,
+      hours: entry.friend.curr_drop_screentime,
+      imageName: entry.friend.profile_picture,
     }));
 
     res.status(200).json(friends);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 };
+
+
+
+
 
 
