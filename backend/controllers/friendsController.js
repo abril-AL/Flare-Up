@@ -153,3 +153,30 @@ exports.getFriendRequests = async (req, res) => {
   }
 };
 
+
+exports.getRankedFriends = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const { data, error } = await supabase
+      .from('friends')
+      .select('friend_id, users(name, profile_picture, curr_period_screentime)')
+      .eq('user_id', userId)
+      .order('users.curr_period_screentime', { ascending: true });
+
+    if (error) throw error;
+
+    const friends = data.map((entry, index) => ({
+      id: entry.friend_id,
+      rank: index + 1,
+      name: entry.users.name,
+      hours: entry.users.curr_period_screentime,
+      imageName: entry.users.profile_picture
+    }));
+
+    res.status(200).json(friends);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
