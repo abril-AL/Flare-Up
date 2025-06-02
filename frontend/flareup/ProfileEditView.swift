@@ -6,12 +6,13 @@ struct ProfileEditView: View {
     @Binding var username: String
     @Binding var statusMessage: String
     @Binding var screentimeGoal: String
+
     @Environment(\.presentationMode) var presentationMode
     @State private var showingSignOutAlert = false
     @State private var isSigningOut = false
     @EnvironmentObject var session: SessionViewModel
+    @AppStorage("authToken") private var authToken: String = ""
 
-    
     var body: some View {
         NavigationView {
             Form {
@@ -25,8 +26,7 @@ struct ProfileEditView: View {
                     TextField("Screen Time Goal", text: $screentimeGoal)
                         .font(.custom("Poppins-Regular", size: 16))
                 }
-                
-                
+
                 Section {
                     Button(action: {
                         showingSignOutAlert = true
@@ -46,13 +46,12 @@ struct ProfileEditView: View {
                 leading: Button("Cancel") {
                     isEditing = false
                 },
-                .trailing: Button("Save") {
-    Task {
-        await updateUserProfile()
-        isEditing = false
-    }
-}
-
+                trailing: Button("Save") {
+                    Task {
+                        await updateUserProfile()
+                        isEditing = false
+                    }
+                }
             )
             .alert(isPresented: $showingSignOutAlert) {
                 Alert(
@@ -66,41 +65,42 @@ struct ProfileEditView: View {
             }
         }
     }
+
     private func updateUserProfile() async {
-    guard let url = URL(string: "\(Config.backendURL)/users/update") else {
-        print("Invalid URL")
-        return
-    }
-
-    let goalMinutes = Int(screentimeGoal.filter("0123456789".contains)) ?? 0
-
-    let payload: [String: Any] = [
-        "username": username,
-        "goal_screen_time": goalMinutes
-    ]
-
-    var request = URLRequest(url: url)
-    request.httpMethod = "PUT"
-    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
-
-    do {
-        let jsonData = try JSONSerialization.data(withJSONObject: payload)
-        request.httpBody = jsonData
-
-        let (data, response) = try await URLSession.shared.data(for: request)
-
-        if let httpResponse = response as? HTTPURLResponse {
-            print("Server responded with status:", httpResponse.statusCode)
+        guard let url = URL(string: "\(Config.backendURL)/users/update") else {
+            print("Invalid URL")
+            return
         }
 
-        if let body = String(data: data, encoding: .utf8) {
-            print("Server response body:", body)
+        let goalMinutes = Int(screentimeGoal.filter("0123456789".contains)) ?? 0
+
+        let payload: [String: Any] = [
+            "username": username,
+            "goal_screen_time": goalMinutes
+        ]
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: payload)
+            request.httpBody = jsonData
+
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            if let httpResponse = response as? HTTPURLResponse {
+                print("Server responded with status:", httpResponse.statusCode)
+            }
+
+            if let body = String(data: data, encoding: .utf8) {
+                print("Server response body:", body)
+            }
+        } catch {
+            print("Error updating profile:", error.localizedDescription)
         }
-    } catch {
-        print("Error updating profile:", error.localizedDescription)
     }
-}
 
     private func signOut() {
         isSigningOut = true
@@ -109,7 +109,6 @@ struct ProfileEditView: View {
             isSigningOut = false
         }
     }
-
 }
 
 struct ProfileEditView_Previews: PreviewProvider {
@@ -118,9 +117,9 @@ struct ProfileEditView_Previews: PreviewProvider {
             isEditing: .constant(true),
             name: .constant("scotty"),
             username: .constant("squatpawk"),
-            statusMessage: .constant("\u{1F512} locked in"),
+            statusMessage: .constant("locked in"),
             screentimeGoal: .constant("3 Hours")
         )
+        .environmentObject(SessionViewModel()) // needed for preview
     }
-} 
-
+}

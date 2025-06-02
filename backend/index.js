@@ -22,8 +22,6 @@ app.use((req, res, next) => {
 app.use('/auth', require('./routes/authRoutes'));
 app.use('/friends', require('./routes/friends'));
 app.use('/screentime', require('./routes/screentimeRoutes'));
-const userRoutes = require('./routes/users');
-app.use('/users', userRoutes);
 
 //app.use('/groups', require('./routes/groups'));
 

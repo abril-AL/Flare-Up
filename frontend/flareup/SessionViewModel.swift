@@ -24,7 +24,7 @@ class SessionViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var isAuthenticated = false
     @AppStorage("userId") private var userId: String = ""
-    @AppStorage("authToken") private var authToken: String = ""
+    @AppStorage("authToken")  var authToken: String = ""
 
     private var currentSession: Session?
 
