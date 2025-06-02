@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit// for img picker
 
 struct SignupView: View {
     @Environment(\.dismiss) var dismiss
@@ -8,6 +9,8 @@ struct SignupView: View {
     @State private var password = ""
     @State private var confirmPassword = ""
     @State private var stGoal: Int = 1 // Screen time goal
+    @State private var profileImage: UIImage? = nil
+    @State private var isPickerPresented = false
 
     var body: some View {
         NavigationStack {
@@ -27,10 +30,10 @@ struct SignupView: View {
                         .padding(.horizontal)
 
                     }
-                    .frame(height: 220)
+                    .frame(height: 100)
                     
                     // FORM section
-                    VStack(spacing: 20) {
+                    VStack(spacing: 14) {
                         
                         // Back to Login Page
                         HStack {
@@ -45,18 +48,42 @@ struct SignupView: View {
                                         .textCase(.lowercase)
                                 }
                                 .foregroundColor(Color.gray)
+                                .offset(y:10)
                             }
                             Spacer()
                         }
                         .padding(.horizontal, 28)
                         .padding(.top, -12)
                         
-                        Text("Login")
+                        Text("Sign Up")
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundColor(Color("AccentRed"))
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.horizontal, 28)
+                        VStack {
+                            if let image = profileImage {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 100, height: 100)
+                                    .clipShape(Circle())
+                            } else {
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 100, height: 100)
+                                    .foregroundColor(.gray)
+                            }
+
+                            Button("Upload Profile Picture") {
+                                isPickerPresented = true
+                            }
+                            .font(.footnote)
+                        }
+                        .sheet(isPresented: $isPickerPresented) {
+                            ImagePicker(image: $profileImage)
+                        }
 
                         HStack(spacing: 12) {
                             Image("LogInPerson")
@@ -108,8 +135,8 @@ struct SignupView: View {
                         .cornerRadius(30)
                         .padding(.horizontal, 28)
                         
-                        VStack(spacing: 6) {
-                            Text(" Daily Screen Time Goal (hrs)")
+                        HStack(spacing: 6) {
+                            Text(" Daily Screen \n Time Goal")
                                 .font(.custom("Poppins-Regular", size: 17))
                                 .foregroundColor(Color("AccentRed"))
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -151,17 +178,50 @@ struct SignupView: View {
                         }
                         .offset(y:40)
                     }
-                    .offset(y:30)
+                    .offset(y:20)
                     .frame(maxWidth: .infinity)
                     .background(Color("LightComponent"))
                     .cornerRadius(30, corners: [.topLeft, .topRight])
                     .ignoresSafeArea(edges: .bottom)
                 }
-                .offset(y:-50)
+                .offset(y:40)
             }
         }
     }
 }
+
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var image: UIImage?
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.delegate = context.coordinator
+        picker.sourceType = .photoLibrary
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        let parent: ImagePicker
+
+        init(_ parent: ImagePicker) {
+            self.parent = parent
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let uiImage = info[.originalImage] as? UIImage {
+                parent.image = uiImage
+            }
+            picker.dismiss(animated: true)
+        }
+    }
+}
+
 #Preview {
     SignupView()
 }
