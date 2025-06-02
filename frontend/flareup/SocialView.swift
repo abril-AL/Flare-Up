@@ -3,6 +3,7 @@ import SwiftUI
 
 struct SocialView: View {
     @StateObject private var viewModel = CountdownViewModel()
+    @EnvironmentObject var session: SessionViewModel
     
     var body: some View {
         NavigationStack {
@@ -53,7 +54,7 @@ struct SocialView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 18) {
-                                ForEach(friendSampleData.filter { $0.name != "scotty" }.prefix(5), id: \.id) { friend in
+                                ForEach(session.friends.filter { $0.name != "scotty" }.prefix(5), id: \.id) { friend in
                                     VStack(spacing: 4) {
                                         Image(friend.imageName)
                                             .resizable()
