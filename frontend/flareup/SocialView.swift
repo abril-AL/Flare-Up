@@ -84,9 +84,7 @@ struct SocialView: View {
                             
                             Spacer()
                             
-                            Button(action: {
-                                // navigate to add group
-                            }) {
+                            NavigationLink(destination: SendFriendRequestView()) {
                                 Text("+ add")
                                     .font(.custom("Poppins-Bold", size: 14))
                                     .foregroundColor(.white)

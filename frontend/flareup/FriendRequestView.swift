@@ -15,9 +15,9 @@ struct FriendRequestsView: View {
                 Button(action: {
                     // dismiss or pop navigation
                 }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(Color(hex: "F7941D"))
-                        .font(.system(size: 24, weight: .medium))
+                    //Image(systemName: "chevron.left")
+                        //.foregroundColor(Color(hex: "F7941D"))
+                        //.font(.system(size: 24, weight: .medium))
                 }
                 Text("friend requests")
                     .font(.custom("Poppins-Bold", size: 30))
