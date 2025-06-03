@@ -2,6 +2,7 @@ import SwiftUI
 
 struct AllFriendsView: View {
     @State private var flaredFriends: Set<String> = [] // track which friends have been flared
+    @EnvironmentObject var session: SessionViewModel
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -21,7 +22,7 @@ struct AllFriendsView: View {
                             Spacer()
 
                             Button(action: {
-                                let allNames = friendSampleData.map { $0.name }
+                                let allNames = session.friends.map { $0.name }
                                 flaredFriends = Set(allNames.filter { $0 != "scotty" })
                             }) {
                                 Text("Flare All")
@@ -38,7 +39,7 @@ struct AllFriendsView: View {
 
                         // Friend list
                         ForEach(
-                            friendSampleData
+                            session.friends
                                 .filter { $0.name != "scotty" }
                                 .sorted { $0.name.lowercased() < $1.name.lowercased() },
                             id: \.id

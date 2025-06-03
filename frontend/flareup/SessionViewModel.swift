@@ -1,15 +1,7 @@
-//
-//  SessionViewModel.swift
-//  flareup
-//
-//  Created by Richelle Shim on 5/31/25.
-//
-
 import SwiftUI
 import VisionKit
 import Supabase
 import Vision
-
 
 struct ScreentimeEntry: Encodable {
     let user_id: String
@@ -18,13 +10,22 @@ struct ScreentimeEntry: Encodable {
     let top_apps: [String: Int]
 }
 
+struct Friend: Identifiable, Decodable {
+    let id: UUID
+    let rank: Int
+    let name: String
+    let hours: Int
+    let imageName: String
+}
 
+@MainActor
 class SessionViewModel: ObservableObject {
     @Published var isUploading = false
     @Published var errorMessage: String?
     @Published var isAuthenticated = false
+    @Published var friends: [Friend] = []
     @AppStorage("userId") private var userId: String = ""
-    @AppStorage("authToken")  var authToken: String = ""
+    @AppStorage("authToken") var authToken: String = ""
 
     private var currentSession: Session?
 
@@ -42,6 +43,7 @@ class SessionViewModel: ObservableObject {
                 self.userId = session.user.id.uuidString
                 self.authToken = session.accessToken
             }
+            await fetchFriends(for: session.user.id.uuidString)
         } catch {
             await MainActor.run {
                 self.isAuthenticated = false
@@ -60,6 +62,28 @@ class SessionViewModel: ObservableObject {
                 self.userId = session.user.id.uuidString
                 self.authToken = session.accessToken
             }
+            await fetchFriends(for: session.user.id.uuidString)
+        } catch {
+            await MainActor.run {
+                self.isAuthenticated = false
+                self.userId = ""
+                self.authToken = ""
+                self.errorMessage = error.localizedDescription
+            }
+            throw error
+        }
+    }
+
+    func signUp(email: String, password: String) async throws {
+        do {
+            try await SupabaseManager.shared.signUp(email: email, password: password)
+            let session = try await SupabaseManager.shared.getSession()
+            await MainActor.run {
+                self.isAuthenticated = true
+                self.userId = session.user.id.uuidString
+                self.authToken = session.accessToken
+            }
+            await fetchFriends(for: session.user.id.uuidString)
         } catch {
             await MainActor.run {
                 self.isAuthenticated = false
@@ -79,30 +103,25 @@ class SessionViewModel: ObservableObject {
                 self.currentSession = nil
                 self.userId = ""
                 self.authToken = ""
+                self.friends = []
             }
         } catch {
             print("Sign out error:", error.localizedDescription)
         }
     }
 
+    private func fetchFriends(for userID: String) async {
+        guard let url = URL(string: "http://localhost:4000/friends/ranked/\(userID)") else {
+            print("Invalid friends URL")
+            return
+        }
 
-    func signUp(email: String, password: String) async throws {
         do {
-            try await SupabaseManager.shared.signUp(email: email, password: password)
-            let session = try await SupabaseManager.shared.getSession()
-            await MainActor.run {
-                self.isAuthenticated = true
-                self.userId = session.user.id.uuidString
-                self.authToken = session.accessToken
-            }
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let decoded = try JSONDecoder().decode([Friend].self, from: data)
+            self.friends = decoded
         } catch {
-            await MainActor.run {
-                self.isAuthenticated = false
-                self.userId = ""
-                self.authToken = ""
-                self.errorMessage = error.localizedDescription
-            }
-            throw error
+            print("Failed to fetch friends: \(error.localizedDescription)")
         }
     }
 
@@ -151,7 +170,6 @@ class SessionViewModel: ObservableObject {
                 total_minutes: totalMinutes,
                 top_apps: topApps
             )
-
 
             _ = try await SupabaseManager.shared.client
                 .from("screentime")
