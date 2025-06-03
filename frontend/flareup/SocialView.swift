@@ -53,17 +53,24 @@ struct SocialView: View {
                         .padding(.horizontal)
                         
                         ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 18) {
-                                ForEach(session.friends.filter { $0.name != "scotty" }.prefix(5), id: \.id) { friend in
-                                    VStack(spacing: 4) {
+                            HStack(spacing: 30) {
+                                ForEach(session.friends, id: \.id) { friend in
+                                    VStack(spacing: 8) {
                                         Image(friend.imageName)
                                             .resizable()
+                                            .scaledToFill()
                                             .frame(width: 90, height: 90)
                                             .clipShape(Circle())
-                                        Text(friend.name)
-                                            .font(.custom("Poppins-Bold", size: 14))
+                                            .overlay(
+                                                Circle()
+                                                    .stroke(Color(hex: "F7941D"), lineWidth: 2)
+                                            )
+
+                                        Text(friend.name.capitalized.lowercased())
+                                            .font(.custom("Poppins-Regular", size: 14))
                                             .foregroundColor(Color(hex: "F7941D"))
                                     }
+                                    .frame(width: 70)
                                 }
                             }
                             .padding(.horizontal)
@@ -144,11 +151,27 @@ struct GroupModel: Identifiable {
 }
 
 let groupSampleData = [
-    GroupModel(name: "The Chuzz", members: ["abrilPic", "daltonPic", "richellePic"]),
-    GroupModel(name: "HCI 4 Lyfe", members: ["emjunPic", "abrilPic", "profilePic"]),
-    GroupModel(name: "CS188TAS", members: ["emjunPic", "olliePic", "hangerPic"])
+    GroupModel(name: "The Chuzz", members: ["abrilpic", "daltonPic", "richellePic"]),
+    GroupModel(name: "HCI 4 Lyfe", members: ["emjunpic", "abrilpic", "profilePic"]),
+    GroupModel(name: "CS188TAS", members: ["emjunpic", "olliePic", "hangerPic"])
 ]
+
 #Preview {
     SocialView()
-    //MainView()
+        .environmentObject(SessionViewModel.mock)
+}
+
+extension SessionViewModel {
+    static var mock: SessionViewModel {
+        let vm = SessionViewModel()
+        vm.friends = [
+            Friend(id: UUID(), rank: 2, name: "abril", username: "abrillchuzz", hours: 1, imageName: "abrilpic"),
+            Friend(id: UUID(), rank: 3, name: "dalton", username: "uwu420", hours: 1, imageName: "daltonPic"),
+            Friend(id: UUID(), rank: 4, name: "richelle", username: "greedyXOXO", hours: 1, imageName: "richellePic"),
+            Friend(id: UUID(), rank: 5, name: "hanger", username: "coat_hanger", hours: 1, imageName: "hangerPic"),
+            Friend(id: UUID(), rank: 6, name: "ollie", username: "opai", hours: 1, imageName: "olliePic"),
+            Friend(id: UUID(), rank: 7, name: "emjun", username: "nice_XD", hours: 1, imageName: "emjunpic")
+        ]
+        return vm
+    }
 }

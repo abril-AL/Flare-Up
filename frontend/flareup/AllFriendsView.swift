@@ -36,7 +36,34 @@ struct AllFriendsView: View {
                             }
                         }
                         .padding(.horizontal)
+                        
+                        NavigationLink(destination: FriendRequestsView()) {
+                            HStack(spacing: 16) {
+                                Image("angelaPic") // Replace with dynamic image if needed
+                                    .resizable()
+                                    .frame(width: 54, height: 54)
+                                    .clipShape(Circle())
 
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("friend requests")
+                                        .font(.custom("Poppins-Bold", size: 25))
+                                        .foregroundColor(Color(hex: "F25D29"))
+                                    Text("angela + 1 others")
+                                        .font(.custom("Poppins-Regular", size: 16))
+                                        .foregroundColor(.gray)
+                                }
+
+                                Spacer()
+
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(Color(hex: "F7941D"))
+                            }
+                            .padding()
+                            .background(Color(hex: "FFF2E2"))
+                            .cornerRadius(40)
+                            .padding(.horizontal)
+                        }
+                        
                         // Friend list
                         ForEach(
                             session.friends
@@ -51,9 +78,15 @@ struct AllFriendsView: View {
                                     .clipShape(Circle())
                                     .overlay(Circle().stroke(Color(hex: "F7941D"), lineWidth: 3))
 
-                                Text("  " + friend.name.capitalized)
-                                    .font(.custom("Poppins-Bold", size: 30))
-                                    .foregroundColor(Color(hex: "F25D29"))
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(friend.name.capitalized)
+                                        .font(.custom("Poppins-Bold", size: 26))
+                                        .foregroundColor(Color(hex: "F25D29"))
+
+                                    Text("@\(friend.username)")
+                                        .font(.custom("Poppins-Regular", size: 16))
+                                        .foregroundColor(.gray)
+                                }
 
                                 Spacer()
 
@@ -64,21 +97,17 @@ struct AllFriendsView: View {
                                         flaredFriends.insert(friend.name)
                                     }
                                 }) {
-                                    Image(systemName: "exclamationmark.circle.fill")
+                                    Image(flaredFriends.contains(friend.name) ? "flare-dark" : "flare-grey")
                                         .resizable()
-                                        .frame(width: 60, height: 60)
-                                        .foregroundColor(.white)
-                                        .background(
-                                            Circle()
-                                                .fill(flaredFriends.contains(friend.name) ? Color.orange : Color(hex: "F7941D"))
-                                        )
-                                        .shadow(color: flaredFriends.contains(friend.name) ? Color.orange.opacity(0.4) : .clear, radius: 6)
+                                        .frame(width: 50, height: 50)
+                                        .background(Circle().fill(Color.white.opacity(0.7)))
                                 }
                             }
                             .padding(.vertical, 12)
                             .padding(.horizontal, 20)
-                            .background(Color(hex: "FFF5E9"))
+                            .background(Color.white)
                             .cornerRadius(40)
+                            .shadow(color: Color.black.opacity(0.04), radius: 2, x: 0, y: 1)
                             .padding(.horizontal)
                         }
                     }
@@ -89,7 +118,8 @@ struct AllFriendsView: View {
         }
     }
 }
+
 #Preview {
     AllFriendsView()
-    //MainView()
+        .environmentObject(SessionViewModel.mock)
 }
