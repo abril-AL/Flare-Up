@@ -49,7 +49,7 @@ struct OutgoingFlaresView: View {
                     .cornerRadius(30)
 
                     Button("edit") {
-                        // action -  idk ill figure it out later
+                        // action -  idk ill figure it out later 
                     }
                     .font(.custom("Poppins-Bold", size: 16))
                     .foregroundColor(.white)

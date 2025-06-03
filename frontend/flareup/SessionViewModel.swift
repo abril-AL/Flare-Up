@@ -14,7 +14,15 @@ struct Friend: Identifiable, Decodable {
     let id: UUID
     let rank: Int
     let name: String
+    let username: String // need for friends listing and adding friends / friend requests
     let hours: Int
+    let imageName: String
+}
+
+struct FriendRequest: Identifiable {
+    let id = UUID()
+    let name: String
+    let username: String
     let imageName: String
 }
 
