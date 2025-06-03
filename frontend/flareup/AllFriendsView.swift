@@ -21,18 +21,14 @@ struct AllFriendsView: View {
 
                             Spacer()
 
-                            Button(action: {
-                                let allNames = session.friends.map { $0.name }
-                                flaredFriends = Set(allNames.filter { $0 != "scotty" })
-                            }) {
-                                Text("Flare All")
-                                    .font(.custom("Poppins-Regular", size: 14))
-                                    .padding(.horizontal, 15)
-                                    .padding(.vertical, 10)
-                                    .background(Color(hex: "F25D29"))
+                            NavigationLink(destination: SendFriendRequestView()) {
+                                Text("+ add")
+                                    .font(.custom("Poppins-Bold", size: 14))
                                     .foregroundColor(.white)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(Color(hex: "F7941D"))
                                     .cornerRadius(20)
-                                    .shadow(radius: 3)
                             }
                         }
                         .padding(.horizontal)

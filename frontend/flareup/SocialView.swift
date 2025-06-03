@@ -83,16 +83,7 @@ struct SocialView: View {
                                 .foregroundColor(Color(hex: "F7941D"))
                             
                             Spacer()
-                            
-                            NavigationLink(destination: SendFriendRequestView()) {
-                                Text("+ add")
-                                    .font(.custom("Poppins-Bold", size: 14))
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 6)
-                                    .background(Color(hex: "F7941D"))
-                                    .cornerRadius(20)
-                            }
+                        
                         }
                         .padding(.horizontal)
                         
