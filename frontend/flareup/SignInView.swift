@@ -66,6 +66,3 @@ struct SignInView: View {
         }
     }
 }
-
-
-

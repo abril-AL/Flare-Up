@@ -1,5 +1,7 @@
 import SwiftUI
 
+// keeping this here just in case...
+
 struct SignUpView: View {
     @EnvironmentObject var session: SessionViewModel
     @State private var email = ""
