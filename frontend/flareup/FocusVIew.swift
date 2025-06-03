@@ -47,27 +47,27 @@ struct FocusView: View {
                         // New Flares UI
                         VStack(spacing: 16) {
                             // Incoming flares card
-                            Button(action: {
-                                // Navigate to incoming flares
-                            }) {
+                            NavigationLink(destination: IncomingFlaresView()) {
+                                // full HStack UI here (as you've just done)
+                                
                                 HStack {
                                     Image("flare-orange")
                                         .resizable()
                                         .frame(width: 48, height: 48)
                                         .clipShape(Circle())
-
+                                    
                                     VStack(alignment: .leading) {
                                         Text("incoming flares")
-                                            .font(.custom("Poppins-Bold", size: 18))
+                                            .font(.custom("Poppins-Bold", size: 25))
                                             .foregroundColor(Color(hex: "F25D29"))
-
+                                        
                                         Text("Abril + 1 others")
-                                            .font(.custom("Poppins-Regular", size: 14))
+                                            .font(.custom("Poppins-Regular", size: 16))
                                             .foregroundColor(.gray)
                                     }
-
+                                    
                                     Spacer()
-
+                                    
                                     Image(systemName: "chevron.right")
                                         .foregroundColor(.orange)
                                 }
@@ -77,9 +77,7 @@ struct FocusView: View {
                             }
                             
                             // View outgoing flares
-                            Button(action: {
-                                // Navigate to outgoing flares
-                            }) {
+                            NavigationLink(destination: OutgoingFlaresView()) {
                                 HStack {
                                     Text("view outgoing flares")
                                         .font(.custom("Poppins-Bold", size: 25))
@@ -94,9 +92,7 @@ struct FocusView: View {
                             }
                             
                             // Send a flare
-                            Button(action: {
-                                // Trigger send flare popup or navigation
-                            }) {
+                            NavigationLink(destination: SendFlareView()) {
                                 HStack {
                                     Image("flare-white")
                                         .resizable()
