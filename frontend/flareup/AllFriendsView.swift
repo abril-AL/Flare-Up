@@ -35,7 +35,7 @@ struct AllFriendsView: View {
                         
                         NavigationLink(destination: FriendRequestsView()) {
                             HStack(spacing: 16) {
-                                Image("angelaPic") // Replace with dynamic image if needed
+                                Image("angelPic") // Replace with dynamic image if needed
                                     .resizable()
                                     .frame(width: 54, height: 54)
                                     .clipShape(Circle())
