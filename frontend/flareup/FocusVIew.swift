@@ -47,30 +47,34 @@ struct FocusView: View {
                         // New Flares UI
                         VStack(spacing: 16) {
                             // Incoming flares card
-                            HStack {
-                                Image("abrilProfile") // ← replace with dynamic image if needed
-                                    .resizable()
-                                    .frame(width: 48, height: 48)
-                                    .clipShape(Circle())
-                                
-                                VStack(alignment: .leading) {
-                                    Text("incoming flares")
-                                        .font(.custom("Poppins-Bold", size: 18))
-                                        .foregroundColor(Color(hex: "F25D29"))
-                                    
-                                    Text("Abril + 1 others")
-                                        .font(.custom("Poppins-Regular", size: 14))
-                                        .foregroundColor(.gray)
+                            Button(action: {
+                                // Navigate to incoming flares
+                            }) {
+                                HStack {
+                                    Image("flare-orange")
+                                        .resizable()
+                                        .frame(width: 48, height: 48)
+                                        .clipShape(Circle())
+
+                                    VStack(alignment: .leading) {
+                                        Text("incoming flares")
+                                            .font(.custom("Poppins-Bold", size: 18))
+                                            .foregroundColor(Color(hex: "F25D29"))
+
+                                        Text("Abril + 1 others")
+                                            .font(.custom("Poppins-Regular", size: 14))
+                                            .foregroundColor(.gray)
+                                    }
+
+                                    Spacer()
+
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(.orange)
                                 }
-                                
-                                Spacer()
-                                
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.orange)
+                                .padding()
+                                .background(Color(hex: "FFF2E2"))
+                                .cornerRadius(24)
                             }
-                            .padding()
-                            .background(Color(hex: "FFF2E2"))
-                            .cornerRadius(24)
                             
                             // View outgoing flares
                             Button(action: {
@@ -78,7 +82,7 @@ struct FocusView: View {
                             }) {
                                 HStack {
                                     Text("view outgoing flares")
-                                        .font(.custom("Poppins-SemiBold", size: 16))
+                                        .font(.custom("Poppins-Bold", size: 25))
                                         .foregroundColor(Color(hex: "F25D29"))
                                     Spacer()
                                     Image(systemName: "chevron.right")
@@ -94,9 +98,13 @@ struct FocusView: View {
                                 // Trigger send flare popup or navigation
                             }) {
                                 HStack {
-                                    Image(systemName: "exclamationmark.circle.fill")
+                                    Image("flare-white")
+                                        .resizable()
+                                        .frame(width: 24, height: 24)
+                                        .padding(.leading, 4)
+
                                     Text("send a flare")
-                                        .font(.custom("Poppins-SemiBold", size: 16))
+                                        .font(.custom("Poppins-Bold", size: 25))
                                 }
                                 .foregroundColor(.white)
                                 .padding()
