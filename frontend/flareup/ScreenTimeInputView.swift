@@ -1,114 +1,117 @@
 import SwiftUI
 
-struct ScreenTimeEntry: Codable {
-    let duration: Int
-    let date: String
-    let category: String
-}
-
 struct ScreenTimeInputView: View {
     @State private var hours: Int = 0
     @State private var minutes: Int = 0
-    @State private var selectedCategory = "Social Media"
+    @State private var mostUsedApp: String = ""
     @State private var selectedDate = Date()
+    @State private var isSubmitting = false
     @State private var showAlert = false
     @State private var alertMessage = ""
-    @State private var isSubmitting = false
-    @State private var retryCount = 0
-    @State private var showReplaceConfirmation = false
-    @Environment(\.dismiss) private var dismiss
-    @AppStorage("userId") private var userId: String = ""
-    @AppStorage("authToken") private var authToken: String = ""
-
-    let categories = ["Total"]
-    let maxRetries = 3
+        @Environment(\.dismiss) private var dismiss
+        @AppStorage("userId") private var userId: String = ""
+        @AppStorage("authToken") private var authToken: String = ""
 
     var body: some View {
-        NavigationView {
-            Form {
-                Section(header: Text("Duration")) {
+        ZStack {
+            Color(hex: "FFECDD")
+                .ignoresSafeArea()
+
+            VStack(spacing: 24) {
+                Image("flareup") // Replace with your asset name
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 180, height: 60)
+                    .padding(.top, 40)
+
+                VStack(spacing: 8) {
+                    Text("Drop Report")
+                        .font(.custom("Poppins-Bold", size: 28))
+                        .foregroundColor(Color(hex: "F25D29"))
+
+                    DatePicker(
+                        "",
+                        selection: $selectedDate,
+                        displayedComponents: [.date]
+                    )
+                    .labelsHidden()
+                    .datePickerStyle(.compact)
+                    .tint(Color(hex: "F25D29"))
+                }
+
+                VStack(alignment: .leading, spacing: 20) {
+                    Text("Enter your daily screentime")
+                        .font(.custom("Poppins-Regular", size: 16))
+
                     HStack {
                         Picker("Hours", selection: $hours) {
-                            ForEach(0..<24) { hour in Text("\(hour) hr").tag(hour) }
-                        }.pickerStyle(MenuPickerStyle())
+                            ForEach(0..<24) { Text("\($0) hr").tag($0) }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(10)
 
                         Picker("Minutes", selection: $minutes) {
-                            ForEach(0..<60) { minute in Text("\(minute) min").tag(minute) }
-                        }.pickerStyle(MenuPickerStyle())
+                            ForEach(0..<60) { Text("\($0) min").tag($0) }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(10)
                     }
-                }
 
-                Section(header: Text("Date")) {
-                    DatePicker("Screentime Date", selection: $selectedDate, displayedComponents: .date)
-                }
+                    Text("What was your most used app?")
+                        .font(.custom("Poppins-Regular", size: 16))
 
-                Section(header: Text("Category")) {
-                    Picker("Category", selection: $selectedCategory) {
-                        ForEach(categories, id: \.self) { category in Text(category) }
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
+                    TextField("e.g. TikTok", text: $mostUsedApp)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(10)
                 }
+                .padding(.horizontal, 24)
 
-                Section {
-                    Button("Submit") {
-                        Task { await checkAndSubmitScreenTime() }
-                    }
-                    .disabled(isSubmitting)
+                Button(action: submit) {
+                    Text("submit report")
+                        .font(.custom("Poppins-SemiBold", size: 18))
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 12)
+                        .frame(maxWidth: .infinity)
+                        .background(Color(hex: "FFECDD"))
+                        .foregroundColor(Color(hex: "F25D29"))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color(hex: "F25D29"), lineWidth: 2)
+                        )
+                        .cornerRadius(10)
                 }
+                .padding(.horizontal, 24)
+                .disabled(isSubmitting)
+
+                Spacer()
             }
-            .navigationTitle("Log Screen Time")
-            .alert(isPresented: $showAlert) {
-                Alert(
-                    title: Text(alertMessage.contains("successfully") ? "Success" : "Error"),
-                    message: Text(alertMessage),
-                    dismissButton: .default(Text("OK")) { if alertMessage.contains("successfully") { dismiss() } }
-                )
-            }
-            .confirmationDialog(
-                "An entry for this date already exists. Replace it?",
-                isPresented: $showReplaceConfirmation,
-                titleVisibility: .visible
-            ) {
-                Button("Replace", role: .destructive) {
-                    Task { await submitScreenTime(overwrite: true) }
-                }
-                Button("Cancel", role: .cancel) {}
-            }
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Success"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
         }
     }
 
-    private func checkAndSubmitScreenTime() async {
-        let dateString = ISO8601DateFormatter().string(from: selectedDate)
-        guard let url = URL(string: "\(Config.backendURL)/screentime/\(userId)") else {
-            handleError("Invalid check URL")
-            return
-        }
-
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
-
-        do {
-            let (data, _) = try await URLSession.shared.data(for: request)
-            let existingEntries = try JSONDecoder().decode([ScreenTimeEntry].self, from: data)
-            if existingEntries.contains(where: { $0.date.prefix(10) == dateString.prefix(10) }) {
-                showReplaceConfirmation = true
-                return
-            } else {
-                await submitScreenTime()
-            }
-        } catch {
-            await submitScreenTime() // fallback to default submit
-        }
-    }
-
-    private func submitScreenTime(overwrite: Bool = false) async {
+    private func submit() {
         isSubmitting = true
+
         let totalMinutes = (hours * 60) + minutes
         let isoDate = ISO8601DateFormatter().string(from: selectedDate)
-        let entry = ScreenTimeEntry(duration: totalMinutes, date: isoDate, category: selectedCategory)
+        let entry: [String: Any] = [
+            "duration": totalMinutes,
+            "date": isoDate,
+            "category": mostUsedApp  // using 'category' to store most used app
+        ]
 
         guard let url = URL(string: "\(Config.backendURL)/screentime") else {
-            handleError("Invalid URL")
+            alertMessage = "Invalid backend URL."
+            showAlert = true
             return
         }
 
@@ -116,40 +119,46 @@ struct ScreenTimeInputView: View {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
-        request.setValue(authToken, forHTTPHeaderField: "token")
+        request.setValue(authToken, forHTTPHeaderField: "token")  // ← Add this
 
         do {
-            let body = try JSONEncoder().encode(entry)
-            request.httpBody = body
+            request.httpBody = try JSONSerialization.data(withJSONObject: entry)
 
-            let (data, response) = try await URLSession.shared.data(for: request)
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                DispatchQueue.main.async {
+                    isSubmitting = false
 
-            if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
-                let err = try? JSONDecoder().decode([String: String].self, from: data)
-                handleError(err?["error"] ?? "Server error \(httpResponse.statusCode)")
-            } else {
-                handleSuccess()
-            }
+                    if let error = error {
+                        alertMessage = "Failed to submit: \(error.localizedDescription)"
+                        showAlert = true
+                        return
+                    }
+
+                    if let httpResponse = response as? HTTPURLResponse {
+                        if !(200...299).contains(httpResponse.statusCode) {
+                            alertMessage = "Error \(httpResponse.statusCode): Unauthorized. Please log in again."
+                            showAlert = true
+                            return
+                        }
+                    }
+
+                    alertMessage = "Submitted successfully for \(formattedDate(selectedDate))!"
+                    showAlert = true
+                    hours = 0
+                    minutes = 0
+                    mostUsedApp = ""
+                }
+            }.resume()
         } catch {
-            handleError("Network error: \(error.localizedDescription)")
+            isSubmitting = false
+            alertMessage = "Encoding error: \(error.localizedDescription)"
+            showAlert = true
         }
-
-        isSubmitting = false
     }
 
-    private func handleSuccess() {
-        alertMessage = "Screen time logged successfully!"
-        hours = 0
-        minutes = 0
-        selectedCategory = "Social Media"
-        retryCount = 0
-        showAlert = true
-    }
-
-    private func handleError(_ message: String) {
-        alertMessage = retryCount >= maxRetries ?
-            "Failed after \(maxRetries) attempts: \(message)" : "Error: \(message)"
-        isSubmitting = false
-        showAlert = true
+    private func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        return formatter.string(from: date)
     }
 }

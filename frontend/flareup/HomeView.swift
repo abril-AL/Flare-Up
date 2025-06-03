@@ -19,11 +19,28 @@ struct TimeBlockView: View {
     }
 }
 
+struct ScreenTimeEntry: Codable {
+    let duration: Int
+    let date: String
+    let category: String
+}
+
+struct DropData: Codable {
+    let date: String
+    let total_minutes: Int
+    let average_daily_hours: Double
+    let weekly_change: Double?
+    let most_used_app: String?
+    let most_used_app_minutes: Int?
+    let missing_this_week: Bool
+    let missing_last_week: Bool
+}
+
 struct HomeView: View {
 
     @StateObject private var viewModel = CountdownViewModel()
     @EnvironmentObject var session: SessionViewModel
-
+    @State private var drop: DropData? = nil
 
     var body: some View {
         VStack(spacing: 0) {
@@ -96,40 +113,54 @@ struct HomeView: View {
 
                             Spacer()
 
-                            Text(currentDay)
+                            Text(drop?.date ?? currentDay)
                                 .font(.custom("Poppins-Bold", size: 24))
                                 .foregroundColor(Color(hex: "F7941D"))
                         }
 
-                        Text("You were on your phone for 12 Hours last week!")
-                            .font(.custom("Poppins-Regular", size: 14.4))
-                            .foregroundColor(.gray)
-
-                        HStack(spacing: 6) {
-                            Text("23%")
-                                .foregroundColor(.green)
-                                .fontWeight(.bold)
-                            Text("decrease from the previous drop!")
+                        if drop?.missing_this_week == true {
+                            Text("You didn't input your data this week.")
+                                .font(.custom("Poppins-Regular", size: 14.4))
                                 .foregroundColor(.gray)
-                        }
-
-                        HStack(spacing: 6) {
-                            Text("1.57x")
-                                .foregroundColor(.green)
-                                .fontWeight(.bold)
-                            Text("lower than your friends!")
+                        } else if let mins = drop?.total_minutes {
+                            Text("You were on your phone for \(mins / 60) Hours last week!")
+                                .font(.custom("Poppins-Regular", size: 14.4))
                                 .foregroundColor(.gray)
-                        }
 
-                        HStack(spacing: 8) {
-                            Image("flareUpLogo_icon")
-                                .resizable()
-                                .frame(width: 36, height: 36)
+                            if let change = drop?.weekly_change {
+                                HStack(spacing: 6) {
+                                    Text(String(format: "%.0f%%", change * 100))
+                                        .foregroundColor(change < 0 ? .green : .red)
+                                        .fontWeight(.bold)
+                                    Text("change from the previous drop!")
+                                        .foregroundColor(.gray)
+                                }
+                            } else {
+                                Text("Last week, you didn't input your data. Welcome back!")
+                                    .font(.custom("Poppins-Regular", size: 14.4))
+                                    .foregroundColor(.gray)
+                            }
 
-                            Text("flareup was your most used app at ").font(.custom("Poppins-Regular", size: 19)) + Text("3.2 hours!").font(.custom("Poppins-Bold", size: 19))
+                            HStack(spacing: 6) {
+                                Text(String(format: "%.2f", drop!.average_daily_hours))
+                                    .foregroundColor(.green)
+                                    .fontWeight(.bold)
+                                Text("average daily usage")
+                                    .foregroundColor(.gray)
+                            }
+
+                            if let app = drop?.most_used_app, let min = drop?.most_used_app_minutes {
+                                HStack(spacing: 8) {
+                                    Image("flareUpLogo_icon")
+                                        .resizable()
+                                        .frame(width: 36, height: 36)
+
+                                    Text("\(app) was your most used app at ").font(.custom("Poppins-Regular", size: 19)) + Text("\(Double(min) / 60, specifier: "%.1f") hours!").font(.custom("Poppins-Bold", size: 19))
+                                }
+                                .font(.footnote)
+                                .foregroundColor(.orange)
+                            }
                         }
-                        .font(.footnote)
-                        .foregroundColor(.orange)
                     }
                     .padding()
                     .background(Color.white)
@@ -180,6 +211,25 @@ struct HomeView: View {
                 }
                 .padding(.top)
             }
+            .onAppear {
+                Task {
+                    await fetchDrop()
+                }
+            }
+        }
+    }
+
+    func fetchDrop() async {
+        guard let url = URL(string: "http://localhost:4000/screentime/drop/\(session.userId)") else { return }
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(session.authToken)", forHTTPHeaderField: "Authorization")
+
+        do {
+            let (data, _) = try await URLSession.shared.data(for: request)
+            let decoded = try JSONDecoder().decode(DropData.self, from: data)
+            drop = decoded
+        } catch {
+            print("Drop fetch failed:", error.localizedDescription)
         }
     }
 }
@@ -199,4 +249,3 @@ extension Color {
         self.init(red: r, green: g, blue: b)
     }
 }
-
