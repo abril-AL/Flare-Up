@@ -1,115 +1,227 @@
 import SwiftUI
+import UIKit// for img picker
 
-struct SignUpView: View {
-    @EnvironmentObject var session: SessionViewModel
+struct SignupView: View {
+    @Environment(\.dismiss) var dismiss
+
+    @State private var username = ""
     @State private var email = ""
     @State private var password = ""
-    @State private var name = ""
-    @State private var username = ""
-    @State private var screentimeGoal = ""
-    @State private var showAlert = false
+    @State private var confirmPassword = ""
+    @State private var stGoal: Int = 1 // Screen time goal
+    @State private var profileImage: UIImage? = nil
+    @State private var isPickerPresented = false
 
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Create Account")
-                .font(.largeTitle)
-                .fontWeight(.bold)
+        NavigationStack {
+            ZStack {
+                Color("BackgroundOrange")
+                    .ignoresSafeArea()
 
-            Group {
-                TextField("Name", text: $name)
-                TextField("Username", text: $username)
-                TextField("Daily Screentime Goal (e.g., 3 for 3 hours)", text: $screentimeGoal)
-                    .keyboardType(.numberPad)
-                TextField("Email", text: $email)
-                    .autocapitalization(.none)
-                SecureField("Password", text: $password)
-            }
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .padding(.horizontal)
+                VStack() {
+                    // TOP section (taller + shifted bubble)
+                    VStack {
+                        HStack {
+                            Image("ThinkingLogo")
+                                .resizable()
+                                .frame(width: 326, height: 103.67)
+                            Spacer()
+                        }
+                        .padding(.horizontal)
 
-            Button(action: {
-                Task {
-                    await handleSignUp()
-                }
-            }) {
-                Text("Sign Up")
-                    .foregroundColor(.white)
+                    }
+                    .frame(height: 100)
+                    
+                    // FORM section
+                    VStack(spacing: 14) {
+                        
+                        // Back to Login Page
+                        HStack {
+                            Button(action: {
+                                dismiss()
+                            }) {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "chevron.left")
+                                        .font(.system(size: 14, weight: .medium))
+                                    Text("back to Login")
+                                        .font(.system(size: 14))
+                                        .textCase(.lowercase)
+                                }
+                                .foregroundColor(Color.gray)
+                                .offset(y:10)
+                            }
+                            Spacer()
+                        }
+                        .padding(.horizontal, 28)
+                        .padding(.top, -12)
+                        
+                        Text("Sign Up")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color("AccentRed"))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 28)
+                        VStack {
+                            if let image = profileImage {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 100, height: 100)
+                                    .clipShape(Circle())
+                            } else {
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 100, height: 100)
+                                    .foregroundColor(.gray)
+                            }
+
+                            Button("Upload Profile Picture") {
+                                isPickerPresented = true
+                            }
+                            .font(.footnote)
+                        }
+                        .sheet(isPresented: $isPickerPresented) {
+                            ImagePicker(image: $profileImage)
+                        }
+
+                        HStack(spacing: 12) {
+                            Image("LogInPerson")
+                                .renderingMode(.template)
+                                .foregroundColor(.gray)
+
+                            TextField("Username", text: $username)
+                                .foregroundColor(.blue)
+                        }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(30)
+                        .padding(.horizontal, 28)
+
+                        HStack(spacing: 12) {
+                            Image("LogInLock")
+                                .renderingMode(.template)
+                                .foregroundColor(.gray)
+
+                            TextField("Email", text: $email)
+                                .foregroundColor(.blue)
+                        }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(30)
+                        .padding(.horizontal, 28)
+
+                        HStack(spacing: 12) {
+                            Image("LogInLock")
+                                .renderingMode(.template)
+                                .foregroundColor(.gray)
+
+                            SecureField("Password", text: $password)
+                        }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(30)
+                        .padding(.horizontal, 28)
+
+                        HStack(spacing: 12) {
+                            Image("LogInLock")
+                                .renderingMode(.template)
+                                .foregroundColor(.gray)
+
+                            SecureField("Confirm Password", text: $confirmPassword)
+                        }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(30)
+                        .padding(.horizontal, 28)
+                        
+                        HStack(spacing: 6) {
+                            Text(" Daily Screen \n Time Goal")
+                                .font(.custom("Poppins-Regular", size: 17))
+                                .foregroundColor(Color("AccentRed"))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.horizontal, 28)
+
+                            Picker("Screen Time Goal", selection: $stGoal) {
+                                ForEach(1..<13) { hour in
+                                    Text("\(hour) hour\(hour == 1 ? "" : "s")").tag(hour)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(30)
+                            .padding(.horizontal, 28)
+                        }
+
+                        Button(action: {
+                            // Sign-up logic here -idk im frontend
+                        }) {
+                            Text("Sign Up")
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color("AccentRed"))
+                                .cornerRadius(30)
+                                .padding(.horizontal, 28)
+                        }
+                        
+                        Button(action: {
+                        }) {
+                            Text("bruh") // ignore this
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color("AccentRed"))
+                                .cornerRadius(30)
+                                .padding(.horizontal, 28)
+                        }
+                        .offset(y:40)
+                    }
+                    .offset(y:20)
                     .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.green)
-                    .cornerRadius(10)
+                    .background(Color("LightComponent"))
+                    .cornerRadius(30, corners: [.topLeft, .topRight])
+                    .ignoresSafeArea(edges: .bottom)
+                }
+                .offset(y:40)
             }
-            .padding(.horizontal)
-
-            Button("Already have an account? Sign In") {
-                // Hook up navigation
-            }
-            .foregroundColor(.blue)
-        }
-        .padding()
-        .alert(isPresented: $showAlert) {
-            Alert(
-                title: Text("Error"),
-                message: Text(session.errorMessage ?? "An unknown error occurred"),
-                dismissButton: .default(Text("OK"))
-            )
-        }
-    }
-
-    private func handleSignUp() async {
-        do {
-            try await session.signUp(email: email, password: password)
-            try await postUserProfile()
-        } catch {
-            showAlert = true
-        }
-    }
-
-    private func postUserProfile() async throws {
-        guard let url = URL(string: "\(Config.backendURL)/users/init") else {
-            print("❌ Invalid backend URL")
-            return
-        }
-
-        guard let goalMinutes = Int(screentimeGoal) else {
-            print("❌ Invalid screentime goal format")
-            return
-        }
-
-        let payload: [String: Any] = [
-            "name": name,
-            "username": username,
-            "goal_screen_time": goalMinutes
-        ]
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(session.authToken)", forHTTPHeaderField: "Authorization")
-
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: payload)
-            request.httpBody = jsonData
-
-            let (data, response) = try await URLSession.shared.data(for: request)
-
-            if let httpResponse = response as? HTTPURLResponse {
-                print("✅ User profile init response:", httpResponse.statusCode)
-            }
-
-            if let body = String(data: data, encoding: .utf8) {
-                print("✅ Server response:", body)
-            }
-        } catch {
-            print("❌ Failed to send user metadata:", error.localizedDescription)
-            throw error
         }
     }
 }
 
-struct SignUpView_Previews: PreviewProvider {
-    static var previews: some View {
-        SignUpView()
-            .environmentObject(SessionViewModel())
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var image: UIImage?
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.delegate = context.coordinator
+        picker.sourceType = .photoLibrary
+        return picker
     }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        let parent: ImagePicker
+
+        init(_ parent: ImagePicker) {
+            self.parent = parent
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let uiImage = info[.originalImage] as? UIImage {
+                parent.image = uiImage
+            }
+            picker.dismiss(animated: true)
+        }
+    }
+}
+
+#Preview {
+    SignupView()
 }
