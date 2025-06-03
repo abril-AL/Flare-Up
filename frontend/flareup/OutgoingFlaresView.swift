@@ -10,53 +10,61 @@ struct OutgoingFlaresView: View {
 
             NavigationLink(destination: SendFlareView()) {
                 HStack {
-                    Image("flare-white")
+                    Image("flare-white") // or your flare icon
                         .resizable()
                         .frame(width: 24, height: 24)
+
                     Text("send a flare")
-                        .font(.custom("Poppins-Bold", size: 18))
+                        .font(.custom("Poppins-Regular", size: 28))
+                        .foregroundColor(.white)
+
+                    Spacer()
+
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.white)
                 }
-                .foregroundColor(.white)
                 .padding()
-                .frame(maxWidth: .infinity)
                 .background(Color(hex: "F25D29"))
-                .cornerRadius(32)
+                .cornerRadius(40)
+                .shadow(radius: 2)
             }
 
             VStack(alignment: .leading, spacing: 12) {
-                Text("\"Someone please come to Powell and study with me\"")
+                Text("“Someone please come to Powell and study with me”")
                     .font(.custom("Poppins-Regular", size: 16))
-                    .foregroundColor(.black)
-                    .padding(8)
+                    .foregroundColor(.gray)
+                    .padding(10)
                     .background(Color(hex: "E9E0D4"))
-                    .cornerRadius(12)
+                    .cornerRadius(16)
 
-                HStack {
+                HStack(spacing: 12) {
                     Button("resolve") {
-                        // resolve action
+                        // action - delete flare ?
                     }
-                    .padding(.horizontal, 16)
+                    .font(.custom("Poppins-Bold", size: 16))
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 22)
                     .padding(.vertical, 8)
                     .background(Color(hex: "F25D29"))
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
+                    .cornerRadius(30)
 
                     Button("edit") {
-                        // edit action
+                        // action -  idk ill figure it out later
                     }
+                    .font(.custom("Poppins-Bold", size: 16))
+                    .foregroundColor(.white)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
                     .background(Color(hex: "77787B"))
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
+                    .cornerRadius(30)
                 }
-
+                
                 Text("sent to...")
-                    .font(.custom("Poppins-Bold", size: 16))
+                    .font(.custom("Poppins-Bold", size: 25))
                     .foregroundColor(Color(hex: "F25D29"))
 
                 HStack(spacing: 8) {
-                    Image("abrilProfile")
+                    Image("abrilPic")
                         .resizable()
                         .frame(width: 36, height: 36)
                         .clipShape(Circle())

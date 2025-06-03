@@ -11,7 +11,7 @@ struct FocusView: View {
     
     var body: some View {
         NavigationStack(path: $path) {
-            VStack(spacing: 0) {
+            VStack(spacing: 5) {
                 FlareupHeader {}
                 
                 // Countdown bar under header
