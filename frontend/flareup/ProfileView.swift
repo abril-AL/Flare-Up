@@ -48,36 +48,25 @@ struct ProfileView: View {
                                         Button("Edit") {
                                             isEditing = true
                                         }
-                                        .font(.custom("Poppins-SemiBold", size: 18))
+                                        .font(.custom("Poppins-SemiBold", size: 20))
                                         .padding(.horizontal, 12)
                                         .padding(.vertical, 4)
                                         .background(Color(hex: "FFECDD"))
                                         .foregroundColor(Color(hex: "F25D29"))
                                         .cornerRadius(8)
                                         .offset(x:-20,y:20)
-
-                                        Button("Log Time") {
-                                            showingScreenTimeInput = true
-                                        }
-                                        .font(.custom("Poppins-SemiBold", size: 18))
-                                        .padding(.horizontal, 12)
-                                        .padding(.vertical, 4)
-                                        .background(Color(hex: "FFECDD"))
-                                        .foregroundColor(Color(hex: "F25D29"))
-                                        .cornerRadius(8)
-                                        .offset(y:20)
                                     }
-                                    .offset(x:-5,y: -18)
+                                    .offset(x:15,y: -25)// edit
                                     
                                     VStack(spacing:-5) {
                                         Text(name)
-                                            .font(.custom("Poppins-Bold", size: 32))
+                                            .font(.custom("Poppins-Bold", size: 33))
                                             .foregroundColor(.white)
-                                        Text(" "+username)
-                                            .font(.custom("Poppins-Regular", size: 20))
+                                        Text("  "+username)
+                                            .font(.custom("Poppins-Regular", size: 22))
                                             .foregroundColor(.white)
                                     }
-                                    .offset(x:-5,y: 5)
+                                    .offset(x:-10,y: 10)// name $ username
                                 }
                                 
                                 Spacer()
@@ -97,7 +86,7 @@ struct ProfileView: View {
                                         .background(Color(hex: "F25D29"))
                                         .clipShape(Circle())
                                         .offset(x: 10, y: 10)
-                                }.offset(y: -55)
+                                }.offset(y: -55) //prof pic
                             }
                             .padding(.horizontal)
                             .padding(.bottom, 8)
@@ -159,7 +148,37 @@ struct ProfileView: View {
                             }
                         }
                         .padding(.vertical, 0)
-                        .offset(y:-130)
+                        .offset(y:-140)
+                        
+                        Button(action: {
+                            showingScreenTimeInput = true
+                        }) {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Enter Your Screen Time!")
+                                        .font(.custom("Poppins-Bold", size: 20))
+                                        .foregroundColor(.white)
+                                    Text("you still haven’t submitted\nyour weekly screen time data\nfor the latest drop")
+                                        .font(.custom("Poppins-Regular", size: 14))
+                                        .foregroundColor(.white.opacity(0.85))
+                                }
+
+                                Spacer()
+
+                                Text("add")
+                                    .font(.custom("Poppins-Bold", size: 18))
+                                    .padding(.horizontal, 20)
+                                    .padding(.vertical, 8)
+                                    .background(Color.white)
+                                    .foregroundColor(Color(hex: "F25D29"))
+                                    .cornerRadius(30)
+                            }
+                            .padding()
+                            .background(Color(hex: "F25D29"))
+                            .cornerRadius(20)
+                            .padding(.horizontal)
+                        }
+                        .offset(y: -120)
                         
                         // Streak summary
                         HStack(alignment: .center, spacing: 12) {
@@ -179,7 +198,7 @@ struct ProfileView: View {
                         .cornerRadius(20)
                         .shadow(radius: 1)
                         .padding(.horizontal)
-                        .offset(y:-110)
+                        .offset(y:-100)
                         
                         // Latest Drop Card
                         VStack(alignment: .leading, spacing: 12) {
@@ -264,7 +283,7 @@ struct ProfileView: View {
                         .cornerRadius(16)
                         .shadow(radius: 1)
                         .padding(.horizontal)
-                        .offset(y:-90)
+                        .offset(y:-80)
                     }
                 }
             }
