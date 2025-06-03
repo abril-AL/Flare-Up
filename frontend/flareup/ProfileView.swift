@@ -38,13 +38,13 @@ struct ProfileView: View {
                         
                         ZStack(alignment: .bottomLeading) {
                             Color(hex: "F7941D")
-                                .frame(height: 130)
+                                .frame(height: 170)
                                 .cornerRadius(20, corners: [.bottomLeft, .bottomRight])
-                                .offset(y: -30)
+                                .offset(y: 0)
                             
                             HStack(alignment: .center) {
                                 VStack(alignment: .leading, spacing: 0) {
-                                    HStack(spacing: 8) {
+                                    VStack(spacing: 8) {
                                         Button("Edit") {
                                             isEditing = true
                                         }
@@ -54,6 +54,7 @@ struct ProfileView: View {
                                         .background(Color(hex: "FFECDD"))
                                         .foregroundColor(Color(hex: "F25D29"))
                                         .cornerRadius(8)
+                                        .offset(x:-20,y:20)
 
                                         Button("Log Time") {
                                             showingScreenTimeInput = true
@@ -64,6 +65,7 @@ struct ProfileView: View {
                                         .background(Color(hex: "FFECDD"))
                                         .foregroundColor(Color(hex: "F25D29"))
                                         .cornerRadius(8)
+                                        .offset(y:20)
                                     }
                                     .offset(x:-5,y: -18)
                                     
@@ -75,7 +77,7 @@ struct ProfileView: View {
                                             .font(.custom("Poppins-Regular", size: 20))
                                             .foregroundColor(.white)
                                     }
-                                    .offset(x:-5,y: -15)
+                                    .offset(x:-5,y: 5)
                                 }
                                 
                                 Spacer()
@@ -100,16 +102,18 @@ struct ProfileView: View {
                             .padding(.horizontal)
                             .padding(.bottom, 8)
                         }
-                        
+                
+                        // Status Message
                         VStack(alignment: .leading, spacing: 8) {
+                            
+                            // Status Message Bubble
                             VStack(spacing: 4) {
-                                Bubble(diameter: 40).offset(x: 145, y: -182)
+                                Bubble(diameter: 45).offset(x: 145, y: -172)
                                 Bubble(diameter: 18).offset(x: 190, y: -226)
                             }
-                            
                             HStack {
                                 Text(statusMessage)
-                                    .font(.custom("Poppins-Regular", size: 18))
+                                    .font(.custom("Poppins-Regular", size: 22))
                                     .foregroundColor(.white)
                                     .padding(.horizontal, 7)
                                     .padding(.vertical, 8)
@@ -119,18 +123,19 @@ struct ProfileView: View {
                                 Spacer()
                             }
                             .padding(.horizontal)
-                            .offset(x:59,y: -239)
+                            .offset(x:59,y: -230)
                             
+                            // Target Screen Time
                             HStack(spacing: 6) {
                                 Image(systemName: "target")
                                 Text(screentimeGoal)
                             }
-                            .font(.custom("Poppins-Regular", size: 20))
+                            .font(.custom("Poppins-Regular", size: 26))
                             .foregroundColor(.white)
-                            .offset(x:225,y: -130)
+                            .offset(x:225,y: -165)
                         }
                         .padding(.horizontal)
-                        .offset(y: -8)
+                        .offset(x:-5,y: -20)
                         
                         // Calendar streak
                         HStack(spacing: 12) {
@@ -154,7 +159,7 @@ struct ProfileView: View {
                             }
                         }
                         .padding(.vertical, 0)
-                        .offset(y:-160)
+                        .offset(y:-130)
                         
                         // Streak summary
                         HStack(alignment: .center, spacing: 12) {
@@ -174,7 +179,7 @@ struct ProfileView: View {
                         .cornerRadius(20)
                         .shadow(radius: 1)
                         .padding(.horizontal)
-                        .offset(y:-140)
+                        .offset(y:-110)
                         
                         // Latest Drop Card
                         VStack(alignment: .leading, spacing: 12) {
@@ -257,9 +262,9 @@ struct ProfileView: View {
                         .padding()
                         .background(Color.white)
                         .cornerRadius(16)
-                        .shadow(radius: 2)
+                        .shadow(radius: 1)
                         .padding(.horizontal)
-                        .offset(y:-120)
+                        .offset(y:-90)
                     }
                 }
             }
