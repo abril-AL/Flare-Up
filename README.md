@@ -1,4 +1,5 @@
 # Flare Up
+![image](https://github.com/user-attachments/assets/6164c7c8-eb6f-49bc-8070-f03156be07bf)
 
 ![image](https://github.com/user-attachments/assets/606ed570-b33e-483a-82d3-874b3f937337)
 
