@@ -3,13 +3,12 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+const PORT = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
 
-// Add this here
+// Request logging middleware
 app.use((req, res, next) => {
   console.log(`[${req.method}] ${req.originalUrl}`);
   if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
@@ -21,17 +20,13 @@ app.use((req, res, next) => {
 // Load routes
 app.use('/auth', require('./routes/authRoutes'));
 app.use('/friends', require('./routes/friends'));
-app.use('/screentime', require('./routes/screentimeRoutes'));
+const screentimeRoutes = require('./routes/screentimeRoutes');
+const dropsRoutes = require('./routes/dropsRoutes');
 
-//app.use('/groups', require('./routes/groups'));
+app.use('/screentime', screentimeRoutes);
+app.use('/drops', dropsRoutes);
 
-app.listen(4000, '0.0.0.0', () => {
-  console.log('Server running on port 4000');
-});
-
-
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
 

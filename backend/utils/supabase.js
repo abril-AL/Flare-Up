@@ -55,7 +55,11 @@ const getSupabaseClient = (accessToken) => {
     }
   );
 
-  // 👇 This is the missing step
+  // Set the auth token for this client instance
+  supabase.auth.setSession({
+    access_token: token,
+    refresh_token: ''
+  });
 
   return supabase;
 };
