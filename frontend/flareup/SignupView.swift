@@ -1,5 +1,15 @@
 import SwiftUI
 import UIKit// for img picker
+import Supabase
+
+struct UserMetadata: Encodable {
+    let id: String
+    let email: String
+    let username: String
+    let goal_screen_time: Int
+    let profile_picture: String
+}
+
 
 struct SignupView: View {
     @Environment(\.dismiss) var dismiss
@@ -155,7 +165,59 @@ struct SignupView: View {
                         }
 
                         Button(action: {
-                            // Sign-up logic here -idk im frontend
+                            Task {
+                                guard password == confirmPassword else {
+                                    print("Passwords do not match")
+                                    return
+                                }
+
+                                do {
+                                    // 1. Sign up with Supabase Auth
+                                    let authResponse = try await SupabaseManager.shared.client.auth.signUp(
+                                        email: email,
+                                        password: password
+                                    )
+                                    let user = authResponse.user
+
+                                    // 2. Upload profile image (optional)
+                                    var profileImageUrl: String? = nil
+                                    if let image = profileImage,
+                                       let imageData = image.jpegData(compressionQuality: 0.8) {
+                                        let fileName = "\(user.id).jpg"
+
+                                        _ = try await SupabaseManager.shared.client.storage
+                                            .from("profile-pics")
+                                            .upload(
+                                                fileName,
+                                                data: imageData,
+                                                options: FileOptions(contentType: "image/jpeg", upsert: true)
+                                            )
+
+                                        let supabaseUrl = "https://lejqwwjzlpwxsdrohllq.supabase.co" // Replace with your actual Supabase URL
+                                        profileImageUrl = "\(supabaseUrl)/storage/v1/object/public/profile-pics/\(fileName)"
+                                    }
+
+                                    // 3. Insert user metadata into your `users` table
+                                    let newUser = UserMetadata(
+                                        id: user.id.uuidString,
+                                        email: email,
+                                        username: username,
+                                        goal_screen_time: stGoal,
+                                        profile_picture: profileImageUrl ?? ""
+                                    )
+
+                                    _ = try await SupabaseManager.shared.client
+                                        .from("users")
+                                        .insert([newUser])
+                                        .execute()
+
+                                    print("Signup complete!")
+                                    dismiss()
+
+                                } catch {
+                                    print("Signup failed: \(error.localizedDescription)")
+                                }
+                            }
                         }) {
                             Text("Sign Up")
                                 .foregroundColor(.white)
@@ -165,6 +227,7 @@ struct SignupView: View {
                                 .cornerRadius(30)
                                 .padding(.horizontal, 28)
                         }
+
                         
                         Button(action: {
                         }) {

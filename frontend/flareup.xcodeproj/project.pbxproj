@@ -13,7 +13,6 @@
 		2AEBE1842DEA464300502A09 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 2AEBE1832DEA464300502A09 /* Realtime */; };
 		2AEBE1862DEA464300502A09 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 2AEBE1852DEA464300502A09 /* Storage */; };
 		2AEBE18B2DEA97C800502A09 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 2AEBE18A2DEA97C800502A09 /* Supabase */; };
-		2AEBE18F2DEBB5F200502A09 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 2AEBE18E2DEBB5EB00502A09 /* .gitignore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,7 +33,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2AEBE18E2DEBB5EB00502A09 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		FBADBE5D2DCE9215009EA124 /* flareup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = flareup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBADBE6A2DCE9216009EA124 /* flareupTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = flareupTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBADBE742DCE9216009EA124 /* flareupUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = flareupUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,7 +110,6 @@
 		FBADBE542DCE9215009EA124 = {
 			isa = PBXGroup;
 			children = (
-				2AEBE18E2DEBB5EB00502A09 /* .gitignore */,
 				FBADBE5F2DCE9215009EA124 /* flareup */,
 				FBADBE6D2DCE9216009EA124 /* flareupTests */,
 				FBADBE772DCE9216009EA124 /* flareupUITests */,
@@ -263,7 +260,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2AEBE18F2DEBB5F200502A09 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
