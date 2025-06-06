@@ -1,90 +1,80 @@
-// const { getSupabaseClient } = require('../utils/supabase');
+const supabase = require('../supabase');
+require('dotenv').config();
 
-// const getUser = async (req, res) => {
-//     const token = req.headers.authorization;
-//     if (!token) return res.status(401).json({ error: 'Missing token' });
+exports.signup = async (req, res) => {
+  try {
+    const { email, password, username, goal_screen_time, profile_picture } = req.body;
 
-//     const supabase = getSupabaseClient(token);
-//     const { data: { user }, error } = await supabase.auth.getUser();
-//     if (error || !user) return res.status(401).json({ error: 'Unauthorized' });
+    if (!email || !password || !username || !goal_screen_time) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
 
-//     const { data, error: userFetchError } = await supabase
-//         .from('users')
-//         .select('*')
-//         .eq('id', user.id)
-//         .single();
+    // 1. Create Auth user
+    const { data: userData, error: signupError } = await supabase.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true
+    });
 
-//     if (userFetchError) return res.status(500).json({ error: userFetchError.message });
-//     return res.json(data);
-// };
+    if (signupError) {
+      console.error('[Auth signup error]', signupError.message);
+      return res.status(400).json({ error: signupError.message });
+    }
 
-// const updateUser = async (req, res) => {
-//     const token = req.headers.authorization;
-//     if (!token) return res.status(401).json({ error: 'Missing token' });
+    if (!userData?.user?.id) {
+      console.error('[Auth user missing in response]');
+      return res.status(500).json({ error: 'Unexpected error creating user' });
+    }
 
-//     const supabase = getSupabaseClient(token);
-//     const { data: { user }, error } = await supabase.auth.getUser();
-//     if (error || !user) return res.status(401).json({ error: 'Unauthorized' });
+    const userId = userData.user.id;
 
-//     const { name, username, goal_screen_time } = req.body;
-//     const updates = {
-//         ...(name && { name }),
-//         ...(username && { username }),
-//         ...(goal_screen_time !== undefined && { goal_screen_time })
-//     };
+    // 2. Upload profile picture if provided
+    let profileUrl = '';
+    if (profile_picture) {
+      try {
+        const buffer = Buffer.from(profile_picture, 'base64');
+        const fileName = `${userId}.jpg`;
 
-//     const { data: updated, error: updateError } = await supabase
-//         .from('users')
-//         .update(updates)
-//         .eq('id', user.id)
-//         .select()
-//         .single();
+        const { error: uploadError } = await supabase.storage
+          .from('profile-pics')
+          .upload(fileName, buffer, {
+            contentType: 'image/jpeg',
+            upsert: true
+          });
 
-//     if (updateError) return res.status(500).json({ error: updateError.message });
-//     return res.json(updated);
-// };
+        if (uploadError) {
+          console.error('[Profile upload error]', uploadError.message);
+          return res.status(400).json({ error: uploadError.message });
+        }
 
-// const initializeUserProfile = async (req, res) => {
-//   try {
-//     const user = req.user;
-//     if (!user || !user.id) {
-//       return res.status(401).json({ error: 'User not authenticated' });
-//     }
+        profileUrl = `${process.env.SUPABASE_URL}/storage/v1/object/public/profile-pics/${fileName}`;
+      } catch (uploadException) {
+        console.error('[Profile upload exception]', uploadException);
+        return res.status(400).json({ error: 'Failed to upload profile picture' });
+      }
+    }
 
-//     const { name, username, goal_screen_time } = req.body;
+    // 3. Insert into users table
+    const { error: insertError } = await supabase
+      .from('users')
+      .insert([
+        {
+          id: userId,
+          email,
+          username,
+          goal_screen_time,
+          profile_picture: profileUrl
+        }
+      ]);
 
-//     if (!name || !username || typeof goal_screen_time !== 'number') {
-//       return res.status(400).json({ error: 'Missing required fields' });
-//     }
+    if (insertError) {
+      console.error('[User insert error]', insertError.message);
+      return res.status(400).json({ error: insertError.message });
+    }
 
-//     const { error } = await supabase
-//       .from('users')
-//       .upsert({
-//         id: user.id,
-//         name,
-//         username,
-//         goal_screen_time,
-//         current_streak: 0,
-//         created_at: new Date().toISOString()
-//       }, { onConflict: ['id'] });
-
-//     if (error) {
-//       console.error('Error saving user profile:', error.message);
-//       return res.status(500).json({ error: 'Failed to save user profile' });
-//     }
-
-//     return res.status(200).json({ message: 'User profile initialized' });
-//   } catch (err) {
-//     console.error('Server error in initializeUserProfile:', err.message);
-//     return res.status(500).json({ error: 'Server error' });
-//   }
-// };
-
-
-
-// console.log('[PUT] /users/update');
-// console.log('Headers:', req.headers);
-// console.log('Body:', req.body);
-
-// module.exports = { getUser, updateUser, initializeUserProfile };
-
+    res.status(201).json({ message: 'Signup successful', user_id: userId });
+  } catch (err) {
+    console.error('[Unexpected signup exception]', err);
+    res.status(500).json({ error: err.message || 'Something went wrong during signup' });
+  }
+};

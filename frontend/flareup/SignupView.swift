@@ -1,8 +1,19 @@
 import SwiftUI
 import UIKit// for img picker
+import Supabase
+
+struct UserMetadata: Encodable {
+    let id: String
+    let email: String
+    let username: String
+    let goal_screen_time: Int
+    let profile_picture: String
+}
+
 
 struct SignupView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var session: SessionViewModel
 
     @State private var username = ""
     @State private var email = ""
@@ -11,6 +22,8 @@ struct SignupView: View {
     @State private var stGoal: Int = 1 // Screen time goal
     @State private var profileImage: UIImage? = nil
     @State private var isPickerPresented = false
+    @State private var showAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
         NavigationStack {
@@ -92,6 +105,8 @@ struct SignupView: View {
 
                             TextField("Username", text: $username)
                                 .foregroundColor(.blue)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled(true)
                         }
                         .padding()
                         .background(Color.white)
@@ -105,6 +120,10 @@ struct SignupView: View {
 
                             TextField("Email", text: $email)
                                 .foregroundColor(.blue)
+                                .textInputAutocapitalization(.never)
+                                .keyboardType(.emailAddress)
+                                .autocorrectionDisabled(true)
+                                .font(.custom("Poppins-Regular", size: 15))
                         }
                         .padding()
                         .background(Color.white)
@@ -117,6 +136,9 @@ struct SignupView: View {
                                 .foregroundColor(.gray)
 
                             SecureField("Password", text: $password)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled(true)
+                                .font(.custom("Poppins-Regular", size: 15))
                         }
                         .padding()
                         .background(Color.white)
@@ -129,6 +151,9 @@ struct SignupView: View {
                                 .foregroundColor(.gray)
 
                             SecureField("Confirm Password", text: $confirmPassword)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled(true)
+                                .font(.custom("Poppins-Regular", size: 15))
                         }
                         .padding()
                         .background(Color.white)
@@ -155,7 +180,69 @@ struct SignupView: View {
                         }
 
                         Button(action: {
-                            // Sign-up logic here -idk im frontend
+                            Task {
+                                guard password == confirmPassword else {
+                                    alertMessage = "Passwords do not match"
+                                    showAlert = true
+                                    return
+                                }
+
+                                do {
+                                    var profileBase64: String? = nil
+                                    if let image = profileImage,
+                                       let imageData = image.jpegData(compressionQuality: 0.8) {
+                                        profileBase64 = imageData.base64EncodedString()
+                                    }
+
+                                    let payload: [String: Any] = [
+                                        "email": email,
+                                        "password": password,
+                                        "username": username,
+                                        "goal_screen_time": stGoal,
+                                        "profile_picture": profileBase64 ?? ""
+                                    ]
+
+                                    let jsonData = try JSONSerialization.data(withJSONObject: payload)
+
+                                    guard let url = URL(string: "http://localhost:4000/users/signup") else {
+                                        alertMessage = "Invalid server URL"
+                                        showAlert = true
+                                        return
+                                    }
+
+                                    var request = URLRequest(url: url)
+                                    request.httpMethod = "POST"
+                                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                                    request.httpBody = jsonData
+
+                                    let (data, response) = try await URLSession.shared.data(for: request)
+
+                                    guard let httpResponse = response as? HTTPURLResponse else {
+                                        alertMessage = "Invalid response from server"
+                                        showAlert = true
+                                        return
+                                    }
+
+                                    if httpResponse.statusCode == 201 {
+                                        print("Signup successful!")
+                                        await session.login(email: email, password: password)
+                                        dismiss()
+                                    } else {
+                                        if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                                           let errorMsg = json["error"] as? String {
+                                            alertMessage = "Signup failed: \(errorMsg)"
+                                        } else {
+                                            let responseText = String(data: data, encoding: .utf8) ?? "Unable to decode server response"
+                                            alertMessage = "Signup failed: Unexpected response\n\n\(responseText)"
+                                        }
+                                        showAlert = true
+                                    }
+
+                                } catch {
+                                    alertMessage = "Signup failed: \(error.localizedDescription)"
+                                    showAlert = true
+                                }
+                            }
                         }) {
                             Text("Sign Up")
                                 .foregroundColor(.white)
@@ -165,6 +252,11 @@ struct SignupView: View {
                                 .cornerRadius(30)
                                 .padding(.horizontal, 28)
                         }
+                        .alert(isPresented: $showAlert) {
+                            Alert(title: Text("Signup Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                        }
+
+
                         
                         Button(action: {
                         }) {

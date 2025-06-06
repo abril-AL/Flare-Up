@@ -7,7 +7,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '20mb' }));
 
 // Add this here
 app.use((req, res, next) => {
@@ -19,6 +19,7 @@ app.use((req, res, next) => {
 });
 
 // Load routes
+app.use('/users', require('./routes/users'));
 app.use('/auth', require('./routes/authRoutes'));
 app.use('/friends', require('./routes/friends'));
 const screentimeRoutes = require('./routes/screentimeRoutes');

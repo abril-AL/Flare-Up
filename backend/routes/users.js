@@ -1,13 +1,7 @@
-// const express = require('express');
-// const router = express.Router();
-// const { getUser, updateUser } = require('../controllers/usersController');
+const express = require('express');
+const router = express.Router();
+const { signup } = require('../controllers/usersController');
 
-// const { initializeUserProfile } = require('../controllers/usersController');
-// const { authenticate } = require('../middleware/auth');
+router.post('/signup', signup);
 
-// router.get('/profile', getUser);
-// router.put('/profile', updateUser);
-
-// router.post('/init', authenticate, initializeUserProfile);
-
-// module.exports = router;
+module.exports = router;

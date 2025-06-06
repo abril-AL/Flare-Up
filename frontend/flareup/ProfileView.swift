@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @EnvironmentObject var session: SessionViewModel
+
     @State private var isEditing = false
     @State private var showingScreenTimeInput = false
     @State private var name = "scotty"
@@ -8,6 +10,7 @@ struct ProfileView: View {
     @State private var statusMessage = "\u{1F512} locked in"
     @State private var screentimeGoal = "3 Hours"
     @State private var streakCount = 42
+    @State private var showLogoutDialog = false
     @EnvironmentObject var session: SessionViewModel
 
     
