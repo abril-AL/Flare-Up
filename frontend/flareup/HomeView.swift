@@ -219,19 +219,25 @@ struct HomeView: View {
         }
     }
 
-    func fetchDrop() async {
-        guard let url = URL(string: "http://localhost:4000/screentime/drop/\(session.userId)") else { return }
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(session.authToken)", forHTTPHeaderField: "Authorization")
+func fetchDrop() async {
+    guard let url = URL(string: "http://localhost:4000/drops/latest/\(session.userId)") else { return }
+    var request = URLRequest(url: url)
+    request.setValue("Bearer \(session.authToken)", forHTTPHeaderField: "Authorization")
 
-        do {
-            let (data, _) = try await URLSession.shared.data(for: request)
-            let decoded = try JSONDecoder().decode(DropData.self, from: data)
-            drop = decoded
-        } catch {
-            print("Drop fetch failed:", error.localizedDescription)
+    do {
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        // TEMP: Inspect raw data
+        if let string = String(data: data, encoding: .utf8) {
+            print("📦 Raw drop response:", string)
         }
+
+        let decoded = try JSONDecoder().decode(DropData.self, from: data)
+        drop = decoded
+    } catch {
+        print("Drop fetch failed:", error.localizedDescription)
     }
+}
 }
 
 extension Color {

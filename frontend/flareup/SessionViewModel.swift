@@ -32,8 +32,13 @@ class SessionViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var isAuthenticated = false
     @Published var friends: [Friend] = []
-    @AppStorage("userId") private var userId: String = ""
+
+    @AppStorage("userId") private var storedUserId: String = ""
     @AppStorage("authToken") var authToken: String = ""
+
+    var userId: String {
+        storedUserId
+    }
 
     private var currentSession: Session?
 
@@ -48,14 +53,14 @@ class SessionViewModel: ObservableObject {
             let session = try await SupabaseManager.shared.getSession()
             await MainActor.run {
                 self.isAuthenticated = true
-                self.userId = session.user.id.uuidString
+                self.storedUserId = session.user.id.uuidString
                 self.authToken = session.accessToken
             }
             await fetchFriends(for: session.user.id.uuidString)
         } catch {
             await MainActor.run {
                 self.isAuthenticated = false
-                self.userId = ""
+                self.storedUserId = ""
                 self.authToken = ""
             }
         }
@@ -67,14 +72,14 @@ class SessionViewModel: ObservableObject {
             let session = try await SupabaseManager.shared.getSession()
             await MainActor.run {
                 self.isAuthenticated = true
-                self.userId = session.user.id.uuidString
+                self.storedUserId = session.user.id.uuidString
                 self.authToken = session.accessToken
             }
             await fetchFriends(for: session.user.id.uuidString)
         } catch {
             await MainActor.run {
                 self.isAuthenticated = false
-                self.userId = ""
+                self.storedUserId = ""
                 self.authToken = ""
                 self.errorMessage = error.localizedDescription
             }
@@ -88,14 +93,14 @@ class SessionViewModel: ObservableObject {
             let session = try await SupabaseManager.shared.getSession()
             await MainActor.run {
                 self.isAuthenticated = true
-                self.userId = session.user.id.uuidString
+                self.storedUserId = session.user.id.uuidString
                 self.authToken = session.accessToken
             }
             await fetchFriends(for: session.user.id.uuidString)
         } catch {
             await MainActor.run {
                 self.isAuthenticated = false
-                self.userId = ""
+                self.storedUserId = ""
                 self.authToken = ""
                 self.errorMessage = error.localizedDescription
             }
@@ -109,7 +114,7 @@ class SessionViewModel: ObservableObject {
             await MainActor.run {
                 self.isAuthenticated = false
                 self.currentSession = nil
-                self.userId = ""
+                self.storedUserId = ""
                 self.authToken = ""
                 self.friends = []
             }
@@ -128,6 +133,10 @@ class SessionViewModel: ObservableObject {
             let (data, _) = try await URLSession.shared.data(from: url)
             let decoded = try JSONDecoder().decode([Friend].self, from: data)
             self.friends = decoded
+            print("📱 Friends List:")
+            for friend in decoded {
+                print("• \(friend.name) (@\(friend.username)) – \(friend.hours) hours")
+            }
         } catch {
             print("Failed to fetch friends: \(error.localizedDescription)")
         }

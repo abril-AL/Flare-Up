@@ -31,9 +31,6 @@ const dropsRoutes = require('./routes/dropsRoutes');
 app.use('/screentime', screentimeRoutes);
 app.use('/drops', dropsRoutes);
 
-app.listen(4000, '0.0.0.0', () => {
-  console.log('Server running on port 4000');
-});
 
 
 const PORT = process.env.PORT || 4000;

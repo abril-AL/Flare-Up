@@ -225,7 +225,7 @@ struct SignupView: View {
 
                                     if httpResponse.statusCode == 201 {
                                         print("Signup successful!")
-                                        await session.login(email: email, password: password)
+                                        try await session.signIn(email: email, password: password)
                                         dismiss()
                                     } else {
                                         if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],

@@ -11,7 +11,6 @@ struct ProfileView: View {
     @State private var screentimeGoal = "3 Hours"
     @State private var streakCount = 42
     @State private var showLogoutDialog = false
-    @EnvironmentObject var session: SessionViewModel
 
     
 
