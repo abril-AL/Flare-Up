@@ -13,6 +13,7 @@ struct UserMetadata: Encodable {
 
 struct SignupView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var session: SessionViewModel
 
     @State private var username = ""
     @State private var email = ""
@@ -21,6 +22,8 @@ struct SignupView: View {
     @State private var stGoal: Int = 1 // Screen time goal
     @State private var profileImage: UIImage? = nil
     @State private var isPickerPresented = false
+    @State private var showAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
         NavigationStack {
@@ -102,6 +105,8 @@ struct SignupView: View {
 
                             TextField("Username", text: $username)
                                 .foregroundColor(.blue)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled(true)
                         }
                         .padding()
                         .background(Color.white)
@@ -115,6 +120,10 @@ struct SignupView: View {
 
                             TextField("Email", text: $email)
                                 .foregroundColor(.blue)
+                                .textInputAutocapitalization(.never)
+                                .keyboardType(.emailAddress)
+                                .autocorrectionDisabled(true)
+                                .font(.custom("Poppins-Regular", size: 15))
                         }
                         .padding()
                         .background(Color.white)
@@ -127,6 +136,9 @@ struct SignupView: View {
                                 .foregroundColor(.gray)
 
                             SecureField("Password", text: $password)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled(true)
+                                .font(.custom("Poppins-Regular", size: 15))
                         }
                         .padding()
                         .background(Color.white)
@@ -139,6 +151,9 @@ struct SignupView: View {
                                 .foregroundColor(.gray)
 
                             SecureField("Confirm Password", text: $confirmPassword)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled(true)
+                                .font(.custom("Poppins-Regular", size: 15))
                         }
                         .padding()
                         .background(Color.white)
@@ -167,55 +182,65 @@ struct SignupView: View {
                         Button(action: {
                             Task {
                                 guard password == confirmPassword else {
-                                    print("Passwords do not match")
+                                    alertMessage = "Passwords do not match"
+                                    showAlert = true
                                     return
                                 }
 
                                 do {
-                                    // 1. Sign up with Supabase Auth
-                                    let authResponse = try await SupabaseManager.shared.client.auth.signUp(
-                                        email: email,
-                                        password: password
-                                    )
-                                    let user = authResponse.user
-
-                                    // 2. Upload profile image (optional)
-                                    var profileImageUrl: String? = nil
+                                    var profileBase64: String? = nil
                                     if let image = profileImage,
                                        let imageData = image.jpegData(compressionQuality: 0.8) {
-                                        let fileName = "\(user.id).jpg"
-
-                                        _ = try await SupabaseManager.shared.client.storage
-                                            .from("profile-pics")
-                                            .upload(
-                                                fileName,
-                                                data: imageData,
-                                                options: FileOptions(contentType: "image/jpeg", upsert: true)
-                                            )
-
-                                        let supabaseUrl = "https://lejqwwjzlpwxsdrohllq.supabase.co" // Replace with your actual Supabase URL
-                                        profileImageUrl = "\(supabaseUrl)/storage/v1/object/public/profile-pics/\(fileName)"
+                                        profileBase64 = imageData.base64EncodedString()
                                     }
 
-                                    // 3. Insert user metadata into your `users` table
-                                    let newUser = UserMetadata(
-                                        id: user.id.uuidString,
-                                        email: email,
-                                        username: username,
-                                        goal_screen_time: stGoal,
-                                        profile_picture: profileImageUrl ?? ""
-                                    )
+                                    let payload: [String: Any] = [
+                                        "email": email,
+                                        "password": password,
+                                        "username": username,
+                                        "goal_screen_time": stGoal,
+                                        "profile_picture": profileBase64 ?? ""
+                                    ]
 
-                                    _ = try await SupabaseManager.shared.client
-                                        .from("users")
-                                        .insert([newUser])
-                                        .execute()
+                                    let jsonData = try JSONSerialization.data(withJSONObject: payload)
 
-                                    print("Signup complete!")
-                                    dismiss()
+                                    guard let url = URL(string: "http://localhost:4000/users/signup") else {
+                                        alertMessage = "Invalid server URL"
+                                        showAlert = true
+                                        return
+                                    }
+
+                                    var request = URLRequest(url: url)
+                                    request.httpMethod = "POST"
+                                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                                    request.httpBody = jsonData
+
+                                    let (data, response) = try await URLSession.shared.data(for: request)
+
+                                    guard let httpResponse = response as? HTTPURLResponse else {
+                                        alertMessage = "Invalid response from server"
+                                        showAlert = true
+                                        return
+                                    }
+
+                                    if httpResponse.statusCode == 201 {
+                                        print("Signup successful!")
+                                        await session.login(email: email, password: password)
+                                        dismiss()
+                                    } else {
+                                        if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                                           let errorMsg = json["error"] as? String {
+                                            alertMessage = "Signup failed: \(errorMsg)"
+                                        } else {
+                                            let responseText = String(data: data, encoding: .utf8) ?? "Unable to decode server response"
+                                            alertMessage = "Signup failed: Unexpected response\n\n\(responseText)"
+                                        }
+                                        showAlert = true
+                                    }
 
                                 } catch {
-                                    print("Signup failed: \(error.localizedDescription)")
+                                    alertMessage = "Signup failed: \(error.localizedDescription)"
+                                    showAlert = true
                                 }
                             }
                         }) {
@@ -227,6 +252,10 @@ struct SignupView: View {
                                 .cornerRadius(30)
                                 .padding(.horizontal, 28)
                         }
+                        .alert(isPresented: $showAlert) {
+                            Alert(title: Text("Signup Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                        }
+
 
                         
                         Button(action: {

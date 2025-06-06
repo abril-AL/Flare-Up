@@ -1,12 +1,15 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @EnvironmentObject var session: SessionViewModel
+
     @State private var isEditing = false
     @State private var name = "scotty"
     @State private var username = "squatpawk"
     @State private var statusMessage = "\u{1F512} locked in"
     @State private var screentimeGoal = "3 Hours"
     @State private var streakCount = 42
+    @State private var showLogoutDialog = false
 
     let days: [(String, Int)] = [("S", 21), ("M", 22), ("T", 23), ("W", 24), ("T", 25), ("F", 26), ("S", 27)]
     let successful: Set<Int> = [21, 22, 23, 24]
@@ -51,15 +54,38 @@ struct ProfileView: View {
                                 .cornerRadius(8)
                                 .offset(x:-5,y: -18)
                                 
-                                VStack(spacing:-5) {
+                                VStack(spacing: -5) {
                                     Text(name)
                                         .font(.custom("Poppins-Bold", size: 32))
                                         .foregroundColor(.white)
-                                    Text(" "+username)
-                                        .font(.custom("Poppins-Regular", size: 20))
-                                        .foregroundColor(.white)
+                                    
+                                    HStack(spacing: 8) {
+                                        Text("@" + username)
+                                            .font(.custom("Poppins-Regular", size: 20))
+                                            .foregroundColor(.white)
+                                        
+                                        Button(action: {
+                                            showLogoutDialog = true
+                                        }) {
+                                            Image(systemName: "rectangle.portrait.and.arrow.right")
+                                                .foregroundColor(.white)
+                                        }
+                                        .confirmationDialog(
+                                            "Are you sure you want to sign out?",
+                                            isPresented: $showLogoutDialog,
+                                            titleVisibility: .visible
+                                        ) {
+                                            Button("Sign Out", role: .destructive) {
+                                                Task {
+                                                    await session.logout()
+                                                }
+                                            }
+                                            Button("Cancel", role: .cancel) {}
+                                        }
+                                    }
                                 }
-                                .offset(x:-5,y: -15)
+                                .offset(x: -5, y: -15)
+
                             }
                             
                             Spacer()
@@ -159,6 +185,7 @@ struct ProfileView: View {
                     .shadow(radius: 1)
                     .padding(.horizontal)
                     .offset(y:-140)
+
                     
                     // Latest Drop Card
                     VStack(alignment: .leading, spacing: 12) {
