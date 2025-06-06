@@ -221,15 +221,16 @@ struct HomeView: View {
 
 func fetchDrop() async {
     guard let url = URL(string: "http://localhost:4000/drops/latest/\(session.userId)") else { return }
+
     var request = URLRequest(url: url)
-    request.setValue("Bearer \(session.authToken)", forHTTPHeaderField: "Authorization")
+    request.setValue("Bearer \(session.authToken)", forHTTPHeaderField: "Authorization") // ✅ key part
 
     do {
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, _) = try await URLSession.shared.data(for: request)
 
-        // TEMP: Inspect raw data
-        if let string = String(data: data, encoding: .utf8) {
-            print("📦 Raw drop response:", string)
+        // Debug print to inspect what’s coming back from server
+        if let raw = String(data: data, encoding: .utf8) {
+            print("📦 Raw Drop Response:", raw)
         }
 
         let decoded = try JSONDecoder().decode(DropData.self, from: data)
@@ -238,6 +239,7 @@ func fetchDrop() async {
         print("Drop fetch failed:", error.localizedDescription)
     }
 }
+
 }
 
 extension Color {
