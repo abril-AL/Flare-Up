@@ -1,4 +1,4 @@
-const supabase = require('../supabase');
+const { supabase } = require('../utils/supabase');
 
 // Send a friend request from sender_id to receiver_id
 exports.sendFriendRequest = async (req, res) => {
@@ -152,4 +152,47 @@ exports.getFriendRequests = async (req, res) => {
     res.status(500).json({ error: err.message || 'Something went wrong' });
   }
 };
+
+// controllers/friendsController.js
+exports.getRankedFriends = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const { data, error } = await supabase
+      .from('friends')
+      .select(`
+        friend_id,
+        friend:friend_id (
+          name,
+          profile_picture,
+          curr_drop_screentime
+        )
+      `)
+      .eq('user_id', userId);
+
+    if (error) throw error;
+
+    const sortedFriends = data
+      .filter(entry => entry.friend !== null)
+      .sort((a, b) => (a.friend.curr_drop_screentime ?? 0) - (b.friend.curr_drop_screentime ?? 0));
+
+    const friends = sortedFriends.map((entry, index) => ({
+      id: entry.friend_id,
+      rank: index + 1,
+      name: entry.friend.name,
+      hours: entry.friend.curr_drop_screentime,
+      imageName: entry.friend.profile_picture,
+    }));
+
+    res.status(200).json(friends);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+
+
+
 

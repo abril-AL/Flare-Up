@@ -2,6 +2,14 @@
 //  RootView.swift
 //  flareup
 //
+//  Created by Richelle Shim on 5/31/25.
+//
+
+
+//
+//  RootView.swift
+//  flareup
+//
 //  Created by Dalton Silverman on 5/31/25.
 //
 
@@ -11,11 +19,12 @@ struct RootView: View {
     @EnvironmentObject var session: SessionViewModel
 
     var body: some View {
-        if session.isAuthenticated {
-            MainView()
-        } else {
-            LoginView()
+        Group {
+            if session.isAuthenticated {
+                MainView()
+            } else {
+                LoginView()
+            }
         }
     }
 }
-

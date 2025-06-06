@@ -13,55 +13,72 @@ struct TimeBlockView: View {
         Text(value)
             .font(.custom("Poppins-Bold", size: 20))
             .foregroundColor(Color(hex: "F25D29"))
-            .frame(width: 28, height:28)
+            .frame(width: 28, height: 28)
             .background(Color(hex: "FFECDD"))
             .cornerRadius(8)
     }
 }
 
+struct ScreenTimeEntry: Codable {
+    let duration: Int
+    let date: String
+    let category: String
+}
+
+struct DropData: Codable {
+    let date: String
+    let total_minutes: Int
+    let average_daily_hours: Double
+    let weekly_change: Double?
+    let most_used_app: String?
+    let most_used_app_minutes: Int?
+    let missing_this_week: Bool
+    let missing_last_week: Bool
+}
+
 struct HomeView: View {
-    
+
     @StateObject private var viewModel = CountdownViewModel()
-    
+    @EnvironmentObject var session: SessionViewModel
+    @State private var drop: DropData? = nil
+
     var body: some View {
         VStack(spacing: 0) {
-                FlareupHeader {} 
+            FlareupHeader {}
 
-                // Countdown lives just under the header
-                HStack {
-                    Spacer()
-                    VStack(alignment: .trailing, spacing: 4) {
-                        Text("next drop")
-                            .font(.custom("Poppins-Regular", size: 18))
-                            .foregroundColor(Color(hex: "F25D29"))
+            HStack {
+                Spacer()
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text("next drop")
+                        .font(.custom("Poppins-Regular", size: 18))
+                        .foregroundColor(Color(hex: "F25D29"))
 
-                        HStack(spacing: 6) {
-                            TimeBlockView(value: viewModel.days)
-                            TimeBlockView(value: viewModel.hours)
-                            TimeBlockView(value: viewModel.minutes)
-                            TimeBlockView(value: viewModel.seconds)
-                        }
+                    HStack(spacing: 6) {
+                        TimeBlockView(value: viewModel.days)
+                        TimeBlockView(value: viewModel.hours)
+                        TimeBlockView(value: viewModel.minutes)
+                        TimeBlockView(value: viewModel.seconds)
                     }
-                    .padding(.trailing)
                 }
-                .padding(.top, -90) // pull upward to nest against the header
-                .background(Color(hex: "FFF2E2")) // match header color
-                .padding(.bottom, 8) // spacing before scrollView
+                .padding(.trailing)
+            }
+            .padding(.top, -90)
+            .background(Color(hex: "FFF2E2"))
+            .padding(.bottom, 8)
 
             ScrollView {
                 ZStack(alignment: .top) {
-                    // White block that pulls up under header
                     Color.white
                         .cornerRadius(20, corners: [.topLeft, .topRight])
-                        .offset(y: -30) // pull upward
-                        .padding(.top, -25) // match the offset (cancel out scroll clipping)
+                        .offset(y: -30)
+                        .padding(.top, -25)
                 }
+
                 VStack(spacing: 15) {
-                    // Your Stats Card
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Your Stats")
                             .font(.custom("Poppins-Bold", size: 25))
-                            .foregroundColor(Color(hex: "F7941D")) // Figma orange
+                            .foregroundColor(Color(hex: "F7941D"))
 
                         Text("You currently have 3 hours left before you reach your daily screen time limit.")
                             .font(.custom("Poppins-Regular", size: 14))
@@ -88,68 +105,80 @@ struct HomeView: View {
                     .padding(.horizontal)
                     .padding(.top, -10)
 
-                    // Latest Drop Card
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
                             Text("Latest Drop")
                                 .font(.custom("Poppins-Bold", size: 25))
-                                .foregroundColor(Color(hex: "F7941D")) // Figma orange
+                                .foregroundColor(Color(hex: "F7941D"))
 
                             Spacer()
 
-                            Text(currentDay)
+                            Text(drop?.date ?? currentDay)
                                 .font(.custom("Poppins-Bold", size: 24))
-                                .foregroundColor(Color(hex: "F7941D")) // Figma orange
+                                .foregroundColor(Color(hex: "F7941D"))
                         }
 
-                        Text("You were on your phone for 12 Hours last week!")
-                            .font(.custom("Poppins-Regular", size: 14.4))
-                            .foregroundColor(.gray)
-
-                        HStack(spacing: 6) {
-                            Text("23%")
-                                .foregroundColor(.green)
-                                .fontWeight(.bold)
-                            Text("decrease from the previous drop!")
+                        if drop?.missing_this_week == true {
+                            Text("You didn't input your data this week.")
+                                .font(.custom("Poppins-Regular", size: 14.4))
                                 .foregroundColor(.gray)
-                        }
-
-                        HStack(spacing: 6) {
-                            Text("1.57x")
-                                .foregroundColor(.green)
-                                .fontWeight(.bold)
-                            Text("lower than your friends!")
+                        } else if let mins = drop?.total_minutes {
+                            Text("You were on your phone for \(mins / 60) Hours last week!")
+                                .font(.custom("Poppins-Regular", size: 14.4))
                                 .foregroundColor(.gray)
-                        }
 
-                        HStack(spacing: 8) {
-                            Image("flareUpLogo_icon")
-                                .resizable()
-                                .frame(width: 36, height: 36)
+                            if let change = drop?.weekly_change {
+                                HStack(spacing: 6) {
+                                    Text(String(format: "%.0f%%", change * 100))
+                                        .foregroundColor(change < 0 ? .green : .red)
+                                        .fontWeight(.bold)
+                                    Text("change from the previous drop!")
+                                        .foregroundColor(.gray)
+                                }
+                            } else {
+                                Text("Last week, you didn't input your data. Welcome back!")
+                                    .font(.custom("Poppins-Regular", size: 14.4))
+                                    .foregroundColor(.gray)
+                            }
 
-                            Text("flareup was your most used app at ").font(.custom("Poppins-Regular", size: 19)) + Text("3.2 hours!").font(.custom("Poppins-Bold", size: 19))
+                            HStack(spacing: 6) {
+                                Text(String(format: "%.2f", drop!.average_daily_hours))
+                                    .foregroundColor(.green)
+                                    .fontWeight(.bold)
+                                Text("average daily usage")
+                                    .foregroundColor(.gray)
+                            }
+
+                            if let app = drop?.most_used_app, let min = drop?.most_used_app_minutes {
+                                HStack(spacing: 8) {
+                                    Image("flareUpLogo_icon")
+                                        .resizable()
+                                        .frame(width: 36, height: 36)
+
+                                    Text("\(app) was your most used app at ").font(.custom("Poppins-Regular", size: 19)) + Text("\(Double(min) / 60, specifier: "%.1f") hours!").font(.custom("Poppins-Bold", size: 19))
+                                }
+                                .font(.footnote)
+                                .foregroundColor(.orange)
+                            }
                         }
-                        .font(.footnote)
-                        .foregroundColor(.orange)
                     }
                     .padding()
                     .background(Color.white)
                     .cornerRadius(16)
                     .shadow(radius: 2)
                     .padding(.horizontal)
-                    .padding(.vertical,5)
+                    .padding(.vertical, 5)
                     .padding(.top, -5)
 
-                    // Friends Rankings
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 20) {
-                            ForEach(friendSampleData, id: \ .id) { friend in
+                            ForEach(session.friends, id: \ .id) { friend in
                                 VStack(spacing: 4) {
-                                    Text("   ")// space bc im dumb and idk how to fix
+                                    Text("   ")
                                         .font(.custom("Poppins-Bold", size: 1))
                                         .padding(.bottom, 10)
                                         .foregroundColor(.gray)
-                                    
+
                                     Image(friend.imageName)
                                         .resizable()
                                         .frame(width: 60, height: 60)
@@ -157,7 +186,7 @@ struct HomeView: View {
                                         .overlay(
                                             Circle().stroke(friend.rank == 4 ? Color.orange : Color.clear, lineWidth: 2)
                                         )
-                                    
+
                                     Text("\(friend.rank)")
                                         .font(.custom("Poppins-Bold", size: 15))
                                         .foregroundColor(Color(hex: "F7941D"))
@@ -171,17 +200,36 @@ struct HomeView: View {
                                         .font(.custom("Poppins-Bold", size: 10))
                                         .padding(.bottom, 2)
                                         .foregroundColor(.gray)
-                                    
+
                                 }
                             }
                         }
-                        .padding(.horizontal,16)
-                        .padding(.vertical,-4)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, -4)
                         .padding(.top, -10)
                     }
                 }
                 .padding(.top)
             }
+            .onAppear {
+                Task {
+                    await fetchDrop()
+                }
+            }
+        }
+    }
+
+    func fetchDrop() async {
+        guard let url = URL(string: "http://localhost:4000/screentime/drop/\(session.userId)") else { return }
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(session.authToken)", forHTTPHeaderField: "Authorization")
+
+        do {
+            let (data, _) = try await URLSession.shared.data(for: request)
+            let decoded = try JSONDecoder().decode(DropData.self, from: data)
+            drop = decoded
+        } catch {
+            print("Drop fetch failed:", error.localizedDescription)
         }
     }
 }
@@ -200,26 +248,4 @@ extension Color {
 
         self.init(red: r, green: g, blue: b)
     }
-}
-
-struct Friend: Identifiable {
-    let id = UUID()
-    let rank: Int
-    let name: String
-    let hours: Int
-    let imageName: String
-}
-
-let friendSampleData = [
-    Friend(rank: 1, name: "emjun", hours: 9, imageName: "emjunPic"),
-    Friend(rank: 2, name: "abril", hours: 12, imageName: "abrilPic"),
-    Friend(rank: 3, name: "dalton", hours: 21, imageName: "daltonPic"),
-    Friend(rank: 4, name: "scotty", hours: 33, imageName: "profilePic"),
-    Friend(rank: 5, name: "richelle", hours: 41, imageName: "richellePic"),
-    Friend(rank: 6, name: "hanger", hours: 55, imageName: "hangerPic"),
-    Friend(rank: 5, name: "ollie", hours: 63, imageName: "olliePic")
-]
-
-#Preview {
-    HomeView()
 }

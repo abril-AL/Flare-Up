@@ -1,0 +1,4 @@
+module FlareUpModels {
+    header "AuthModels.h"
+    export *
+} 

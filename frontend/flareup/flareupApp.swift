@@ -5,21 +5,27 @@
 //  Created by Richelle Shim on 5/9/25.
 //
 
-
 import SwiftUI
 
 @main
-struct FlareupApp: App {
+struct FlareUpApp: App {
+    @State private var isActive = false
     @StateObject private var session = SessionViewModel()
+    
 
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .environmentObject(session)
-                .task {
-                    await session.loadSession()
+            Group {
+                if isActive {
+                    RootView()
+                        .environmentObject(session)
+                } else {
+                    SplashView(isActive: $isActive)
                 }
+            }
+            .task {
+                await session.loadSession()
+            }
         }
     }
 }
-
