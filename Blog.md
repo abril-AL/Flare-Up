@@ -64,7 +64,10 @@ Throughout the design process we also received instructor feedback.
 
 After our crit presentations, they appreciated the emotional insight in the problem, specially users' disappointment in themselves and the need for community-driven accountability. Maria’s persona stood out as compelling, unique, and realistic, especially for highlighting social isolation. The wager and flare features were praised for promoting motivation and connection, with a suggestion to expand flares as a tool for newcomers to connect around shared classes. 
 
-Later, they also recommended being intentional with feature scope—focusing on either flares or wagers as the primary gamification mechanic to avoid overwhelming users. Then they suggested structuring the development timeline around individual features rather than separating backend and frontend phases to prioritize core interactions early.
+Later, the instructors also recommended being intentional with feature scope—focusing on either flares or wagers as the primary gamification mechanic to avoid overwhelming users. Then they suggested structuring the development timeline around individual features rather than separating backend and frontend phases to prioritize core interactions early.
+
+Working with this feedback, we decided to keep both the main features of flares and group wagers and add additional smaller features as we went. We figured that they worked best hand in hand because one offered an online motivating feature as well as a feature that helped users get offline. Both also offered a source of accountability stemming from other, but near and far. That is, flares could be sent to people to body double in person or from afar. Also because of the positive feedback, we decided 
+to keep them, since people were most interested in them actually existing. 
 
 ### System design and implementation 
 #### Paper Prototype
@@ -111,8 +114,74 @@ Flares
 
 ![image](https://github.com/user-attachments/assets/faa5b440-0391-4f49-8ad7-f79d4289c38a)
 
-
 #### Frontend Implementation  
+The frontend of FlareUp is built using SwiftUI, leveraging its declarative syntax for building modern, reactive iOS interfaces. Views are structured around SwiftUI’s `View` protocol and organized using `NavigationStack`, `TabView`, and custom components like headers and modals. State and data flow are managed using `@State`, `@EnvironmentObject`, and `@ObservedObject`, with `SessionViewModel` coordinating user authentication and session-wide data. Key features like flares, friend management, and weekly screen time drops are modularized into focused views, ensuring clarity and reusability. Backend communication, including Supabase auth and Google Vision API calls, is handled through centralized service managers in Swift, maintaining clean separation between UI and logic layers.
+
+App Initialization & Navigation
+- **`flareupApp.swift`**  
+    Entry point of the app; shows splash screen or main content based on session state.
+- **`SplashView.swift`**  
+    Launch screen with logo; transitions to root view after a short delay.
+- **`RootView.swift`**  
+    Routes between `LoginView` and `MainView` depending on authentication state.
+
+Authentication & Session Management
+- **`LoginView.swift`**  
+    User login screen with email/password authentication and link to sign up.
+- **`SignupView.swift`**  
+    User registration form with image upload, screen time goal, and Supabase integration.
+- **`SessionViewModel.swift`**  
+    Global session handler; manages login state, user info, and friend data.
+- **`SupabaseManager.swift`**  
+    Wrapper for Supabase auth functions and user session persistence.
+
+Main Interface & Navigation Tabs
+- **`MainView.swift`**  
+    Tabbed layout for core sections: Home, Focus, Stats, Profile.
+- **`HomeView.swift`**  
+    Home tab showing latest drop data, usage rankings, and streak info.
+- **`FocusView.swift`**  
+    Flare tab with links to view incoming/outgoing flares and drop countdown.
+- **`SocialView.swift`**  
+    Stats tab showing friend list and group previews.
+- **`ProfileView.swift`**  
+    User profile page displaying avatar, screen time, and goal tracking.
+- **`ProfileEditView.swift`**  
+    Inline editor for profile details like name, username, and goals.
+
+Flare Features
+- **`SendFlareView.swift`**  
+    UI for composing and sending a flare to friends.
+- **`OutgoingFlaresView.swift`**  
+    List of sent flares with options to edit or resolve them.    
+- **`IncomingFlaresView.swift`**  
+    View of flares received from others, with sender info and messages.
+
+Groups & Social
+- **`AllFriendsView.swift`**  
+    Shows the full list of friends with quick-send flare buttons.
+- **`FriendRequestView.swift`**  
+    Lists pending friend requests with approval/rejection buttons.
+- **`SendFriendRequest.swift`**  
+    Screen to add a friend via username input (not default in flow).    
+- **`GroupDetailView.swift`**  
+    Detailed group view with drop summary, wagers, and member stats.
+
+Screen Time Input & OCR
+- **`ScreenTimeInputView.swift`**  
+    Form to manually enter screen time and most-used apps.
+- **`VisionAPI.swift`**  
+    Sends screenshots to Google Vision API for OCR parsing.
+
+Shared Components & Utilities
+- **`FlareupHeader.swift`**  
+    Custom header with app logo used across multiple screens.
+- **`CountdownViewModel.swift`**  
+    Displays live countdown timer to next weekly drop.    
+- **`Config.swift`**  
+    Central store for backend URLs and constants.
+- **`ViewExtension.swift`**  
+    Utility for applying rounded corners to specific sides of views.
 
 ### Evaluation question, methods, and analysis approach
 
