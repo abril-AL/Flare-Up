@@ -6,28 +6,34 @@ struct SendFlareView: View {
     @State private var selectedRecipients: Set<String> = []
     @Environment(\.dismiss) var dismiss
     @StateObject private var viewModel = CountdownViewModel()
-    
-    let recipients = [
-        (name: "Abril", handle: "@abrillchuzz"),
-        (name: "Dalton", handle: "@uwu420"),
-        (name: "Eunice", handle: "@Nice_xD"),
-        (name: "Hanger", handle: "@coat_hanger"),
-        (name: "Ollie", handle: "@OlliePop"),
-        (name: "Richelle", handle: "@greedyXOXO")
+    @EnvironmentObject var flareStore: FlareStore
+    @State private var navigateToFocus = false
+
+    struct Recipient: Identifiable {
+        let id = UUID()
+        let name: String
+        let handle: String
+    }
+
+    let recipients: [Recipient] = [
+        .init(name: "Abril", handle: "@abrillchuzz"),
+        .init(name: "Dalton", handle: "@uwu420"),
+        .init(name: "Eunice", handle: "@Nice_xD"),
+        .init(name: "Hanger", handle: "@coat_hanger"),
+        .init(name: "Ollie", handle: "@OlliePop"),
+        .init(name: "Richelle", handle: "@greedyXOXO")
     ]
-    
+
     var body: some View {
         VStack(spacing: 0) {
             FlareupHeader {}
-            
-            // Countdown bar under header
+
             HStack {
                 Spacer()
                 VStack(alignment: .trailing, spacing: 4) {
                     Text("next drop")
                         .font(.custom("Poppins-Regular", size: 18))
                         .foregroundColor(Color(hex: "F25D29"))
-                    
                     HStack(spacing: 6) {
                         TimeBlockView(value: viewModel.days)
                         TimeBlockView(value: viewModel.hours)
@@ -40,7 +46,7 @@ struct SendFlareView: View {
             .padding(.top, -90)
             .background(Color(hex: "FFF2E2"))
             .padding(.bottom, 8)
-            
+
             HStack {
                 Button(action: {
                     dismiss()
@@ -55,42 +61,43 @@ struct SendFlareView: View {
             }
             .padding()
             .background(Color(hex: "F7941D"))
-            
+
             VStack(alignment: .leading, spacing: 12) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Edit your Status Message")
                         .foregroundColor(.white)
-                        .font(.custom("Poppins-Regula", size: 22))
-                    
+                        .font(.custom("Poppins-Regular", size: 22))
+
                     HStack {
                         Image(systemName: "wand.and.stars")
                         TextField("", text: $statusMessage)
                             .foregroundColor(.white)
-                            .font(.custom("Poppins-Regula", size: 20))
+                            .font(.custom("Poppins-Regular", size: 20))
                     }
                     .padding()
                     .background(Color(hex: "FFB55F"))
                     .cornerRadius(30)
                 }
-                
+
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Add a Note")
                         .foregroundColor(.white)
                         .font(.custom("Poppins-Regular", size: 22))
-                    
+
                     TextField("\"NEED TO LOCK IN\"", text: $note)
                         .padding()
                         .background(Color(hex: "FFB55F"))
                         .cornerRadius(30)
                 }
-                
+
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Who do you want to Flare?")
                         .foregroundColor(.white)
                         .font(.custom("Poppins-Regular", size: 20))
+
                     ScrollView {
                         VStack(spacing: 10) {
-                            ForEach(recipients, id: \.handle) { person in
+                            ForEach(recipients) { person in
                                 HStack {
                                     Text("\(person.name) (\(person.handle))")
                                         .font(.custom("Poppins-Regular", size: 16))
@@ -120,9 +127,15 @@ struct SendFlareView: View {
                         .cornerRadius(40)
                     }
                     .frame(maxWidth: .infinity)
-                    
+
                     Button(action: {
-                        // Handle send logic
+                        let newFlare = Flare(
+                            statusMessage: statusMessage,
+                            note: note,
+                            recipients: Array(selectedRecipients)
+                        )
+                        flareStore.flares.append(newFlare)
+                        navigateToFocus = true
                     }) {
                         Text("send flares!")
                             .font(.custom("Poppins-Bold", size: 18))
@@ -133,6 +146,10 @@ struct SendFlareView: View {
                             .cornerRadius(20)
                     }
                     .padding(.top)
+
+                    NavigationLink(destination: FocusView(), isActive: $navigateToFocus) {
+                        EmptyView()
+                    }
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
@@ -146,5 +163,5 @@ struct SendFlareView: View {
 }
 
 #Preview {
-    SendFlareView()
+    SendFlareView().environmentObject(FlareStore())
 }

@@ -140,9 +140,9 @@ struct GroupModel: Identifiable {
 }
 
 let groupSampleData = [
-    GroupModel(name: "The Chuzz", members: ["abrilpic", "daltonPic", "richellePic"]),
-    GroupModel(name: "HCI 4 Lyfe", members: ["emjunpic", "abrilpic", "profilePic"]),
-    GroupModel(name: "CS188TAS", members: ["emjunpic", "olliePic", "hangerPic"])
+    GroupModel(name: "The Chuzz", members: ["abrilPic", "daltonPic", "richellePic"]),
+    GroupModel(name: "HCI 4 Lyfe", members: ["emjunPic", "abrilPic", "profilePic"]),
+    GroupModel(name: "CS188TAS", members: ["emjunPic", "olliePic", "hangerPic"])
 ]
 
 #Preview {
@@ -154,12 +154,12 @@ extension SessionViewModel {
     static var mock: SessionViewModel {
         let vm = SessionViewModel()
         vm.friends = [
-            Friend(id: UUID(), rank: 2, name: "abril", username: "abrillchuzz", hours: 1, imageName: "abrilpic"),
+            Friend(id: UUID(), rank: 2, name: "abril", username: "abrillchuzz", hours: 1, imageName: "abrilPic"),
             Friend(id: UUID(), rank: 3, name: "dalton", username: "uwu420", hours: 1, imageName: "daltonPic"),
             Friend(id: UUID(), rank: 4, name: "richelle", username: "greedyXOXO", hours: 1, imageName: "richellePic"),
             Friend(id: UUID(), rank: 5, name: "hanger", username: "coat_hanger", hours: 1, imageName: "hangerPic"),
             Friend(id: UUID(), rank: 6, name: "ollie", username: "opai", hours: 1, imageName: "olliePic"),
-            Friend(id: UUID(), rank: 7, name: "emjun", username: "nice_XD", hours: 1, imageName: "emjunpic")
+            Friend(id: UUID(), rank: 7, name: "emjun", username: "nice_XD", hours: 1, imageName: "emjunPic")
         ]
         return vm
     }

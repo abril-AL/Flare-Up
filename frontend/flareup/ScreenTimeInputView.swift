@@ -147,6 +147,7 @@ struct ScreenTimeInputView: View {
                     hours = 0
                     minutes = 0
                     mostUsedApp = ""
+                    dismiss()
                 }
             }.resume()
         } catch {

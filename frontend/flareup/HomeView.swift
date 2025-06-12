@@ -136,13 +136,13 @@ struct HomeView: View {
                                         .foregroundColor(.gray)
                                 }
                             } else {
-                                Text("Last week, you didn't input your data. Welcome back!")
+                                Text("Last week, you had missing data, so welcome back!")
                                     .font(.custom("Poppins-Regular", size: 14.4))
                                     .foregroundColor(.gray)
                             }
 
                             HStack(spacing: 6) {
-                                Text(String(format: "%.2f", drop!.average_daily_hours))
+                                Text(String(format: "%.2f hour", drop!.average_daily_hours))
                                     .foregroundColor(.green)
                                     .fontWeight(.bold)
                                 Text("average daily usage")

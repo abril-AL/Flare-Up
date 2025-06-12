@@ -26,12 +26,22 @@ struct FriendRequest: Identifiable {
     let imageName: String
 }
 
+struct UserProfile: Decodable {
+    let id: String
+    let name: String?
+    let username: String
+    let profile_picture: String
+    let goal_screen_time: Int
+}
+
+
 @MainActor
 class SessionViewModel: ObservableObject {
     @Published var isUploading = false
     @Published var errorMessage: String?
     @Published var isAuthenticated = false
     @Published var friends: [Friend] = []
+    @Published var currentUser: UserProfile?
 
     @AppStorage("userId") private var storedUserId: String = ""
     @AppStorage("authToken") var authToken: String = ""
@@ -47,6 +57,51 @@ class SessionViewModel: ObservableObject {
             await loadSession()
         }
     }
+    
+    func loadUserProfile() async {
+        print("🔄 Starting to load user profile for userId:", userId)
+
+        do {
+            let response = try await SupabaseManager.shared.client
+                .from("users")
+                .select("id, name, username, profile_picture, goal_screen_time")
+                .eq("id", value: userId)
+                .single()
+                .execute()
+
+            // 🔍 Log raw data
+            let raw = response.data
+            print("📦 Raw response.data (as Data):", raw)
+
+            if let jsonString = String(data: raw, encoding: .utf8) {
+                print("📄 Raw JSON string:\n\(jsonString)")
+            }
+
+            // ✅ Decode
+            let user = try JSONDecoder().decode(UserProfile.self, from: raw)
+
+            print("✅ Decoded user:")
+            print("🆔 ID: \(user.id)")
+            print("📛 Name: \(user.name)")
+            print("👤 Username: \(user.username)")
+            print("🖼️ Profile Picture: \(user.profile_picture)")
+            print("🎯 Screen Time Goal: \(user.goal_screen_time) minutes")
+
+            await MainActor.run {
+                self.currentUser = user
+                print("✅ Set currentUser in SessionViewModel")
+            }
+
+        } catch {
+            print("❌ Failed to load user profile:", error.localizedDescription)
+        }
+    }
+
+
+
+
+
+
 
     func loadSession() async {
         do {
@@ -76,6 +131,7 @@ class SessionViewModel: ObservableObject {
                 self.authToken = session.accessToken
             }
             await fetchFriends(for: session.user.id.uuidString)
+            await loadUserProfile()
         } catch {
             await MainActor.run {
                 self.isAuthenticated = false

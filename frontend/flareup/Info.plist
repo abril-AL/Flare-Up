@@ -4,6 +4,10 @@
 <dict>
 	<key>GOOGLE_CLOUD_VISION_API_KEY</key>
 	<string></string>
+	<key>INIntentsSupported</key>
+	<array>
+		<string>Intent</string>
+	</array>
 	<key>SUPABASE_ANON_KEY</key>
 	<string>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlanF3d2p6bHB3eHNkcm9obGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY4MTc3MTQsImV4cCI6MjA2MjM5MzcxNH0.vwVppZfEU9quJWlAS_j4JlRLVg3Uc_eaWs9cF43ACHk</string>
 	<key>SUPABASE_URL</key>
@@ -13,13 +17,5 @@
 		<string>Poppins-Regular.ttf</string>
 		<string>Poppins-Bold.ttf</string>
 	</array>
-	<key>CFBundleIdentifier</key>
-	<string></string>
-	<key>INIntentsSupported</key>
-	<array>
-		<string>Intent</string>
-	</array>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs access to your photo library to scan screen time screenshots.</string>
 </dict>
 </plist>

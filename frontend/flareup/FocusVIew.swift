@@ -159,7 +159,7 @@ struct FocusView: View {
                                     }
                                     
                                     HStack(spacing: 10) {
-                                        Image("abrilpic")
+                                        Image("abrilPic")
                                             .resizable()
                                             .frame(width: 36, height: 36)
                                             .clipShape(Circle())

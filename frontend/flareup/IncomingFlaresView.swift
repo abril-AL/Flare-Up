@@ -11,7 +11,7 @@ struct IncomingFlaresView: View {
     }
 
     let flares: [Flare] = [
-        Flare(sender: "abril", avatar: "abrilpic", moodIcon: "🧠", moodText: "nerding", message: "Someone please come to Powell and study with me", nameColor: Color(hex: "F67653")),
+        Flare(sender: "abril", avatar: "abrilPic", moodIcon: "🧠", moodText: "nerding", message: "Someone please come to Powell and study with me", nameColor: Color(hex: "F67653")),
         Flare(sender: "richelle", avatar: "richellePic", moodIcon: "😎", moodText: "chill", message: "Cafe Anyone? Got some mickey mouse work to do", nameColor: Color(hex: "F67653"))
     ]
     @StateObject private var viewModel = CountdownViewModel()

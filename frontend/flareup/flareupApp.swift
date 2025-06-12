@@ -11,7 +11,8 @@ import SwiftUI
 struct FlareUpApp: App {
     @State private var isActive = false
     @StateObject private var session = SessionViewModel()
-    
+    @StateObject var flareStore = FlareStore()
+
 
     var body: some Scene {
         WindowGroup {
@@ -19,12 +20,14 @@ struct FlareUpApp: App {
                 if isActive {
                     RootView()
                         .environmentObject(session)
+                        .environmentObject(flareStore)
                 } else {
                     SplashView(isActive: $isActive)
                 }
             }
             .task {
                 await session.loadSession()
+                //await session.loadUserProfile()
             }
         }
     }

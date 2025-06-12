@@ -1,6 +1,17 @@
 import SwiftUI
 
 struct OutgoingFlaresView: View {
+    @EnvironmentObject var flareStore: FlareStore
+
+    let handleToImage: [String: String] = [
+        "@abrillchuzz": "abrilPic",
+        "@uwu420": "daltonPic",
+        "@Nice_xD": "eunicePic",
+        "@coat_hanger": "hangerPic",
+        "@OlliePop": "olliePic",
+        "@greedyXOXO": "richellePic"
+    ]
+
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("outgoing flares")
@@ -10,7 +21,7 @@ struct OutgoingFlaresView: View {
 
             NavigationLink(destination: SendFlareView()) {
                 HStack {
-                    Image("flare-white") // or your flare icon
+                    Image("flare-white")
                         .resizable()
                         .frame(width: 24, height: 24)
 
@@ -29,54 +40,63 @@ struct OutgoingFlaresView: View {
                 .shadow(radius: 2)
             }
 
-            VStack(alignment: .leading, spacing: 12) {
-                Text("“Someone please come to Powell and study with me”")
-                    .font(.custom("Poppins-Regular", size: 16))
-                    .foregroundColor(.gray)
-                    .padding(10)
-                    .background(Color(hex: "E9E0D4"))
-                    .cornerRadius(16)
-
-                HStack(spacing: 12) {
-                    Button("resolve") {
-                        // action - delete flare ?
-                    }
-                    .font(.custom("Poppins-Bold", size: 16))
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 22)
-                    .padding(.vertical, 8)
-                    .background(Color(hex: "F25D29"))
-                    .cornerRadius(30)
-
-                    Button("edit") {
-                        // action -  idk ill figure it out later 
-                    }
-                    .font(.custom("Poppins-Bold", size: 16))
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(Color(hex: "77787B"))
-                    .cornerRadius(30)
-                }
-                
-                Text("sent to...")
-                    .font(.custom("Poppins-Bold", size: 25))
-                    .foregroundColor(Color(hex: "F25D29"))
-
-                HStack(spacing: 8) {
-                    Image("abrilPic")
-                        .resizable()
-                        .frame(width: 36, height: 36)
-                        .clipShape(Circle())
-                    Text("Abril, Ollie, + 1 others")
-                        .font(.custom("Poppins-Regular", size: 14))
+            ForEach(flareStore.flares) { flare in
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("“\(flare.note)”")
+                        .font(.custom("Poppins-Regular", size: 16))
                         .foregroundColor(.gray)
+                        .padding(10)
+                        .background(Color(hex: "E9E0D4"))
+                        .cornerRadius(16)
+
+                    HStack(spacing: 12) {
+                        Button("resolve") {
+                            if let index = flareStore.flares.firstIndex(where: { $0.id == flare.id }) {
+                                flareStore.flares.remove(at: index)
+                            }
+                        }
+                        .font(.custom("Poppins-Bold", size: 16))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 8)
+                        .background(Color(hex: "F25D29"))
+                        .cornerRadius(30)
+
+                        Button("edit") {
+                            // Placeholder for edit functionality
+                        }
+                        .font(.custom("Poppins-Bold", size: 16))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Color(hex: "77787B"))
+                        .cornerRadius(30)
+                    }
+
+                    Text("sent to...")
+                        .font(.custom("Poppins-Bold", size: 25))
+                        .foregroundColor(Color(hex: "F25D29"))
+
+                    HStack(spacing: 8) {
+                        ForEach(flare.recipients, id: \.self) { recipient in
+                            if let imageName = handleToImage[recipient] {
+                                Image(imageName)
+                                    .resizable()
+                                    .frame(width: 36, height: 36)
+                                    .clipShape(Circle())
+                            }
+                        }
+
+                        Text(flare.recipients.joined(separator: ", "))
+                            .font(.custom("Poppins-Regular", size: 14))
+                            .foregroundColor(.gray)
+                    }
                 }
+                .padding()
+                .background(Color(hex: "FFF2E2"))
+                .cornerRadius(20)
+                .shadow(radius: 1)
             }
-            .padding()
-            .background(Color(hex: "FFF2E2"))
-            .cornerRadius(20)
-            .shadow(radius: 1)
 
             Spacer()
         }
@@ -87,5 +107,5 @@ struct OutgoingFlaresView: View {
 }
 
 #Preview {
-    OutgoingFlaresView()
+    OutgoingFlaresView().environmentObject(FlareStore())
 }

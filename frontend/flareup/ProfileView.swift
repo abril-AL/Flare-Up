@@ -5,10 +5,10 @@ struct ProfileView: View {
 
     @State private var isEditing = false
     @State private var showingScreenTimeInput = false
-    @State private var name = "scotty"
-    @State private var username = "squatpawk"
     @State private var statusMessage = "\u{1F512} locked in"
-    @State private var screentimeGoal = "3 Hours"
+    @State private var name: String = ""
+    @State private var username: String = ""
+    @State private var screentimeGoal: String = ""
     @State private var streakCount = 42
     @State private var showLogoutDialog = false
 
@@ -74,7 +74,7 @@ struct ProfileView: View {
                                 Spacer()
                                 
                                 ZStack(alignment: .bottomTrailing) {
-                                    Image("profilePic")
+                                    Image("defaultPfp")
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: 150, height: 150)
@@ -293,6 +293,13 @@ struct ProfileView: View {
         .sheet(isPresented: $showingScreenTimeInput) {
             ScreenTimeInputView()
         }
+        .onAppear {
+            if let user = session.currentUser {
+                name = user.username ?? "Name"
+                username = user.username
+                screentimeGoal = "\(user.goal_screen_time) Hours"
+            }
+        }
     }
 }
 
@@ -334,7 +341,7 @@ struct ProfileEditSubview: View {
                             .overlay(
                                 VStack(spacing: 12) {
                                     ZStack(alignment: .bottomTrailing) {
-                                        Image("profilePic")
+                                        Image("defaultPfp")
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
                                             .frame(width: 110, height: 110)

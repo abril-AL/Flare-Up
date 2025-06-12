@@ -27,4 +27,17 @@ struct RootView: View {
             }
         }
     }
+    struct FlareupApp: App {
+        @StateObject var flareStore = FlareStore()
+
+        var body: some Scene {
+            WindowGroup {
+                NavigationStack {
+                    OutgoingFlaresView()
+                }
+                .environmentObject(flareStore)
+            }
+        }
+    }
+
 }
