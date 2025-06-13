@@ -166,7 +166,7 @@ exports.getFriendRequests = async (req, res) => {
     const requests = data.map(entry => ({
       name: entry.users.name,
       username: `@${entry.users.username}`, // match your dummy data format
-      imageName: entry.users.profile_picture || "defaultProfile" // fallback in case it's null
+      profile_picture: entry.users.profile_picture || "defaultProfile" // fallback in case it's null
     }));
 
     res.json({ requests });

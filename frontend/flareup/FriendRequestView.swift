@@ -1,10 +1,7 @@
 import SwiftUI
 
 struct FriendRequestsView: View {
-    @State private var requests: [FriendRequest] = [
-        FriendRequest(name: "angela", username: "@korea4ever", imageName: "angelaPic"),
-        FriendRequest(name: "abigail", username: "@bigback321", imageName: "abigailPic")
-    ]
+    @EnvironmentObject var session: SessionViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -14,14 +11,12 @@ struct FriendRequestsView: View {
             HStack {
                 Button(action: {
                     // dismiss or pop navigation
-                }) {
-                    //Image(systemName: "chevron.left")
-                        //.foregroundColor(Color(hex: "F7941D"))
-                        //.font(.system(size: 24, weight: .medium))
-                }
+                }) { /* Back button (optional) */ }
+
                 Text("friend requests")
                     .font(.custom("Poppins-Bold", size: 30))
                     .foregroundColor(Color(hex: "F7941D"))
+
                 Spacer()
             }
             .padding(.horizontal)
@@ -30,7 +25,7 @@ struct FriendRequestsView: View {
             // Requests List
             ScrollView {
                 VStack(spacing: 20) {
-                    ForEach(requests) { request in
+                    ForEach(session.incomingRequests) { request in
                         HStack(alignment: .center, spacing: 16) {
                             Image(request.imageName)
                                 .resizable()
@@ -41,7 +36,7 @@ struct FriendRequestsView: View {
                                 Text(request.name.capitalized)
                                     .font(.custom("Poppins-Bold", size: 20))
                                     .foregroundColor(Color(hex: "F25D29"))
-                                
+
                                 Text(request.username)
                                     .font(.custom("Poppins-Regular", size: 16))
                                     .foregroundColor(.gray)
@@ -49,7 +44,7 @@ struct FriendRequestsView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
 
                             Button(action: {
-                                // approve
+                                // approve action here
                             }) {
                                 Text("approve")
                                     .font(.custom("Poppins-Regular", size: 12))
@@ -62,7 +57,7 @@ struct FriendRequestsView: View {
                             }
 
                             Button(action: {
-                                // reject
+                                // reject action here
                             }) {
                                 Image(systemName: "xmark")
                                     .font(.system(size: 18, weight: .medium))
@@ -79,9 +74,9 @@ struct FriendRequestsView: View {
             }
         }
         .background(Color.white.ignoresSafeArea())
+        .task {
+            await session.loadFriendRequests()
+        }
     }
 }
 
-#Preview {
-    FriendRequestsView()
-}

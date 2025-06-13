@@ -19,12 +19,32 @@ struct Friend: Identifiable, Decodable {
     let imageName: String
 }
 
-struct FriendRequest: Identifiable {
+struct FriendRequest: Identifiable, Decodable {
     let id = UUID()
     let name: String
     let username: String
     let imageName: String
+
+    enum CodingKeys: String, CodingKey {
+        case name
+        case username
+        case imageName = "profile_picture"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        let usernameRaw = try container.decode(String.self, forKey: .username)
+        let cleanedUsername = usernameRaw.replacingOccurrences(of: "@", with: "")
+        let name = try container.decodeIfPresent(String.self, forKey: .name) ?? cleanedUsername
+        let imageName = try container.decode(String.self, forKey: .imageName)
+
+        self.username = usernameRaw
+        self.name = name
+        self.imageName = imageName
+    }
 }
+
 
 struct UserProfile: Decodable {
     let id: String
@@ -42,6 +62,7 @@ class SessionViewModel: ObservableObject {
     @Published var isAuthenticated = false
     @Published var friends: [Friend] = []
     @Published var currentUser: UserProfile?
+    @Published var incomingRequests: [FriendRequest] = []
 
     @AppStorage("userId") private var storedUserId: String = ""
     @AppStorage("authToken") var authToken: String = ""
@@ -57,6 +78,49 @@ class SessionViewModel: ObservableObject {
             await loadSession()
         }
     }
+    
+    func loadFriendRequests() async {
+        guard !userId.isEmpty else {
+            print("⚠️ Missing user ID")
+            return
+        }
+
+        guard let url = URL(string: "http://localhost:4000/friends/requests/\(userId)") else {
+            print("❌ Invalid friend request URL")
+            return
+        }
+
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+
+            if let json = String(data: data, encoding: .utf8) {
+                print("📦 Raw JSON:\n\(json)")
+            }
+
+
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+                if let raw = String(data: data, encoding: .utf8) {
+                    print("❌ Server error:", raw)
+                }
+                return
+            }
+
+            struct FriendRequestResponse: Decodable {
+                let requests: [FriendRequest]
+            }
+
+            let decoded = try JSONDecoder().decode(FriendRequestResponse.self, from: data)
+
+            await MainActor.run {
+                self.incomingRequests = decoded.requests
+                print("📥 Loaded \(decoded.requests.count) friend requests")
+            }
+
+        } catch {
+            print("❌ Failed to load friend requests:", error.localizedDescription)
+        }
+    }
+
     
     func loadUserProfile() async {
         print("🔄 Starting to load user profile for userId:", userId)
