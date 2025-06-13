@@ -3,9 +3,9 @@ require('dotenv').config();
 
 exports.signup = async (req, res) => {
   try {
-    const { email, password, username, goal_screen_time, profile_picture } = req.body;
+    const { email, password, username, name, goal_screen_time, profile_picture } = req.body;
 
-    if (!email || !password || !username || !goal_screen_time) {
+    if (!email || !password || !username || !name || !goal_screen_time) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -54,7 +54,7 @@ exports.signup = async (req, res) => {
       }
     }
 
-    // 3. Insert into users table
+    // 3. Insert user metadata into 'users' table
     const { error: insertError } = await supabase
       .from('users')
       .insert([
@@ -62,6 +62,7 @@ exports.signup = async (req, res) => {
           id: userId,
           email,
           username,
+          name,
           goal_screen_time,
           profile_picture: profileUrl
         }
@@ -78,6 +79,7 @@ exports.signup = async (req, res) => {
     res.status(500).json({ error: err.message || 'Something went wrong during signup' });
   }
 };
+
 
 exports.getUserIdByUsername = async (req, res) => {
   const { username } = req.params;

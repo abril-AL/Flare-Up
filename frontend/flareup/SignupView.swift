@@ -19,6 +19,7 @@ struct SignupView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var confirmPassword = ""
+    @State private var fullName = ""
     @State private var stGoal: Int = 1 // Screen time goal
     @State private var profileImage: UIImage? = nil
     @State private var isPickerPresented = false
@@ -97,6 +98,22 @@ struct SignupView: View {
                         .sheet(isPresented: $isPickerPresented) {
                             ImagePicker(image: $profileImage)
                         }
+                        
+                        HStack(spacing: 12) {
+                            Image(systemName: "person.fill")
+                                .renderingMode(.template)
+                                .foregroundColor(.gray)
+
+                            TextField("Full Name", text: $fullName)
+                                .foregroundColor(.blue)
+                                .textInputAutocapitalization(.words)
+                                .autocorrectionDisabled(true)
+                        }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(30)
+                        .padding(.horizontal, 28)
+
 
                         HStack(spacing: 12) {
                             Image("LogInPerson")
@@ -186,6 +203,8 @@ struct SignupView: View {
                                     showAlert = true
                                     return
                                 }
+                                
+                                
 
                                 do {
                                     var profileBase64: String? = nil
@@ -198,6 +217,7 @@ struct SignupView: View {
                                         "email": email,
                                         "password": password,
                                         "username": username,
+                                        "name": fullName,
                                         "goal_screen_time": stGoal,
                                         "profile_picture": profileBase64 ?? ""
                                     ]
