@@ -3,6 +3,26 @@ import VisionKit
 import Supabase
 import Vision
 
+struct OutgoingFlare: Identifiable, Decodable {
+    let id: String
+    let status: String
+    let note: String?
+    let created_at: String
+    let recipient: Recipient
+
+    struct Recipient: Decodable {
+        let id: String
+        let name: String
+        let username: String
+        let profile_picture: String?
+
+        var imageName: String {
+            profile_picture ?? "defaultProfile"
+        }
+    }
+}
+
+
 struct ScreentimeEntry: Encodable {
     let user_id: String
     let date: String
@@ -63,6 +83,9 @@ class SessionViewModel: ObservableObject {
     @Published var friends: [Friend] = []
     @Published var currentUser: UserProfile?
     @Published var incomingRequests: [FriendRequest] = []
+    @Published var outgoingFlares: [OutgoingFlare] = []
+    @Published var incomingFlares: [IncomingFlare] = []
+
 
     @AppStorage("userId") private var storedUserId: String = ""
     @AppStorage("authToken") var authToken: String = ""
@@ -78,6 +101,38 @@ class SessionViewModel: ObservableObject {
             await loadSession()
         }
     }
+    
+    @MainActor
+    func loadIncomingFlares() async {
+        guard !userId.isEmpty else {
+            print("⚠️ Missing user ID")
+            return
+        }
+
+        guard let url = URL(string: "http://localhost:4000/flares/incoming/\(userId)") else {
+            print("❌ Invalid incoming flares URL")
+            return
+        }
+
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+                if let raw = String(data: data, encoding: .utf8) {
+                    print("❌ Server error:", raw)
+                }
+                return
+            }
+
+            let decoded = try JSONDecoder().decode([IncomingFlare].self, from: data)
+            self.incomingFlares = decoded
+            print("✅ Fetched \(decoded.count) incoming flares")
+
+        } catch {
+            print("❌ Failed to load incoming flares:", error.localizedDescription)
+        }
+    }
+
     
     func loadFriendRequests() async {
         guard !userId.isEmpty else {
@@ -184,6 +239,59 @@ class SessionViewModel: ObservableObject {
             }
         }
     }
+    
+    struct OutgoingFlareResponse: Decodable {
+        let flares: [OutgoingFlare]
+    }
+
+    @MainActor
+    func loadOutgoingFlares() async {
+        guard !userId.isEmpty else { return }
+
+        guard let url = URL(string: "http://localhost:4000/flares/outgoing/\(userId)") else {
+            print("Invalid outgoing flares URL")
+            return
+        }
+
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("📦 Raw JSON:\n\(jsonString)")
+            }
+
+            let decoded = try JSONDecoder().decode(OutgoingFlareResponse.self, from: data)
+            self.outgoingFlares = decoded.flares
+            print("✅ Fetched \(decoded.flares.count) outgoing flares")
+
+        } catch {
+            print("❌ Failed to load outgoing flares:", error.localizedDescription)
+        }
+    }
+
+    
+    @MainActor
+    func deleteFlare(id: String) async {
+        guard let url = URL(string: "http://localhost:4000/flares/\(id)") else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+
+        do {
+            let (_, response) = try await URLSession.shared.data(for: request)
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                self.outgoingFlares.removeAll { $0.id == id }
+                print("✅ Deleted flare with id \(id)")
+            } else {
+                print("❌ Failed to delete flare")
+            }
+        } catch {
+            print("❌ Error deleting flare: \(error.localizedDescription)")
+        }
+    }
+
+
+
 
     func signIn(email: String, password: String) async throws {
         do {

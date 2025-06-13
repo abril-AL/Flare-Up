@@ -22,6 +22,7 @@ app.use((req, res, next) => {
 app.use('/users', require('./routes/users'));
 app.use('/auth', require('./routes/authRoutes'));
 app.use('/friends', require('./routes/friends'));
+app.use('/flares', require('./routes/flares'));
 const screentimeRoutes = require('./routes/screentimeRoutes');
 const dropsRoutes = require('./routes/dropsRoutes');
 // app.use("/drops", require("./routes/drops"));

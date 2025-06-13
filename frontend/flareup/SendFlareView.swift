@@ -1,33 +1,53 @@
 import SwiftUI
 
 struct SendFlareView: View {
+    @EnvironmentObject var session: SessionViewModel
+    @EnvironmentObject var flareStore: FlareStore
+    @StateObject private var viewModel = CountdownViewModel()
+    
     @State private var statusMessage = "locked in"
     @State private var note = ""
-    @State private var selectedRecipients: Set<String> = []
-    @Environment(\.dismiss) var dismiss
-    @StateObject private var viewModel = CountdownViewModel()
-    @EnvironmentObject var flareStore: FlareStore
+    @State private var selectedRecipientIds: Set<UUID> = []
     @State private var navigateToFocus = false
+    @Environment(\.dismiss) var dismiss
 
-    struct Recipient: Identifiable {
-        let id = UUID()
-        let name: String
-        let handle: String
+    // MARK: - Send Flare to Backend
+    func sendFlare(from senderId: String, to recipientId: String, status: String, note: String?) async {
+        guard let url = URL(string: "http://localhost:4000/flares/") else {
+            print("❌ Invalid URL")
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let payload: [String: Any] = [
+            "sender_id": senderId,
+            "recipient_id": recipientId,
+            "status": status,
+            "note": note ?? ""
+        ]
+
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: payload)
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 201 {
+                print("❌ Failed to send flare:", String(data: data, encoding: .utf8) ?? "Unknown error")
+            } else {
+                print("✅ Flare sent to \(recipientId)")
+            }
+        } catch {
+            print("❌ Error sending flare:", error.localizedDescription)
+        }
     }
-
-    let recipients: [Recipient] = [
-        .init(name: "Abril", handle: "@abrillchuzz"),
-        .init(name: "Dalton", handle: "@uwu420"),
-        .init(name: "Eunice", handle: "@Nice_xD"),
-        .init(name: "Hanger", handle: "@coat_hanger"),
-        .init(name: "Ollie", handle: "@OlliePop"),
-        .init(name: "Richelle", handle: "@greedyXOXO")
-    ]
 
     var body: some View {
         VStack(spacing: 0) {
             FlareupHeader {}
 
+            // Drop Countdown
             HStack {
                 Spacer()
                 VStack(alignment: .trailing, spacing: 4) {
@@ -47,6 +67,7 @@ struct SendFlareView: View {
             .background(Color(hex: "FFF2E2"))
             .padding(.bottom, 8)
 
+            // Title Header
             HStack {
                 Button(action: {
                     dismiss()
@@ -63,6 +84,7 @@ struct SendFlareView: View {
             .background(Color(hex: "F7941D"))
 
             VStack(alignment: .leading, spacing: 12) {
+                // Status Message Input
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Edit your Status Message")
                         .foregroundColor(.white)
@@ -79,6 +101,7 @@ struct SendFlareView: View {
                     .cornerRadius(30)
                 }
 
+                // Optional Note
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Add a Note")
                         .foregroundColor(.white)
@@ -90,6 +113,7 @@ struct SendFlareView: View {
                         .cornerRadius(30)
                 }
 
+                // Friends Selection
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Who do you want to Flare?")
                         .foregroundColor(.white)
@@ -97,25 +121,29 @@ struct SendFlareView: View {
 
                     ScrollView {
                         VStack(spacing: 10) {
-                            ForEach(recipients) { person in
+                            ForEach(session.friends) { friend in
                                 HStack {
-                                    Text("\(person.name) (\(person.handle))")
+                                    Text("\(friend.name) (@\(friend.username))")
                                         .font(.custom("Poppins-Regular", size: 16))
-                                        .foregroundColor(selectedRecipients.contains(person.handle) ? Color(hex: "F67653") : .white)
+                                        .foregroundColor(
+                                            selectedRecipientIds.contains(friend.id)
+                                            ? Color(hex: "F67653")
+                                            : .white
+                                        )
 
                                     Spacer()
 
                                     Button(action: {
-                                        if selectedRecipients.contains(person.handle) {
-                                            selectedRecipients.remove(person.handle)
+                                        if selectedRecipientIds.contains(friend.id) {
+                                            selectedRecipientIds.remove(friend.id)
                                         } else {
-                                            selectedRecipients.insert(person.handle)
+                                            selectedRecipientIds.insert(friend.id)
                                         }
                                     }) {
                                         Image("flare-white")
                                             .resizable()
                                             .frame(width: 30, height: 30)
-                                            .opacity(selectedRecipients.contains(person.handle) ? 1.0 : 0.4)
+                                            .opacity(selectedRecipientIds.contains(friend.id) ? 1.0 : 0.4)
                                     }
                                 }
                                 .padding(.vertical, 6)
@@ -126,16 +154,24 @@ struct SendFlareView: View {
                         .background(Color.white.opacity(0.2))
                         .cornerRadius(40)
                     }
-                    .frame(maxWidth: .infinity)
 
+                    // Submit Flare Button
                     Button(action: {
-                        let newFlare = Flare(
-                            statusMessage: statusMessage,
-                            note: note,
-                            recipients: Array(selectedRecipients)
-                        )
-                        flareStore.flares.append(newFlare)
-                        navigateToFocus = true
+                        Task {
+                            let senderId = session.userId
+                            for recipientId in selectedRecipientIds {
+                                await sendFlare(
+                                    from: senderId,
+                                    to: recipientId.uuidString,
+                                    status: statusMessage,
+                                    note: note.isEmpty ? nil : note
+                                )
+                            }
+                            
+                            await session.loadOutgoingFlares()
+                            
+                            navigateToFocus = true
+                        }
                     }) {
                         Text("send flares!")
                             .font(.custom("Poppins-Bold", size: 18))
@@ -163,5 +199,8 @@ struct SendFlareView: View {
 }
 
 #Preview {
-    SendFlareView().environmentObject(FlareStore())
+    SendFlareView()
+        .environmentObject(SessionViewModel())
+        .environmentObject(FlareStore())
 }
+
