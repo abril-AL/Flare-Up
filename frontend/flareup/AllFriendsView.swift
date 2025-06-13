@@ -44,9 +44,6 @@ struct AllFriendsView: View {
                                     Text("friend requests")
                                         .font(.custom("Poppins-Bold", size: 25))
                                         .foregroundColor(Color(hex: "F25D29"))
-                                    Text("angela + 1 others")
-                                        .font(.custom("Poppins-Regular", size: 16))
-                                        .foregroundColor(.gray)
                                 }
 
                                 Spacer()

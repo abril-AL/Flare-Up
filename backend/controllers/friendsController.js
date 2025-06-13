@@ -149,7 +149,6 @@ exports.getFriendRequests = async (req, res) => {
       .select(`
         sender_id,
         users:sender_id (
-          id,
           name,
           username,
           profile_picture
@@ -162,11 +161,12 @@ exports.getFriendRequests = async (req, res) => {
       return res.status(400).json({ error: error.message || 'Something went wrong' });
     }
 
-    // Format the results into the SwiftUI `FriendRequest` shape
+    // Format the results into the shape expected by Swift's FriendRequest model
     const requests = data.map(entry => ({
-      name: entry.users.name,
-      username: `@${entry.users.username}`, // match your dummy data format
-      profile_picture: entry.users.profile_picture || "defaultProfile" // fallback in case it's null
+      sender_id: entry.sender_id,
+      name: entry.users.name ?? entry.users.username,
+      username: `@${entry.users.username}`,
+      profile_picture: entry.users.profile_picture || "defaultProfile"
     }));
 
     res.json({ requests });
@@ -177,62 +177,52 @@ exports.getFriendRequests = async (req, res) => {
 };
 
 
+
 // controllers/friendsController.js
 exports.getRankedFriends = async (req, res) => {
   const { userId } = req.params;
-  console.log("Getting ranked friends for user:", userId);
 
-  try {
-    // Step 1: Get list of friend IDs
-    const { data: friendIdsData, error: friendsError } = await supabase
-      .from('friends')
-      .select('friend_id')
-      .eq('user_id', userId);
-
-    if (friendsError) {
-      console.error("Error fetching friend IDs:", friendsError);
-      return res.status(500).json({ error: friendsError.message });
-    }
-
-    if (!friendIdsData || friendIdsData.length === 0) {
-      console.warn("No friends found for user:", userId);
-      return res.status(200).json([]);
-    }
-
-    const friendIds = friendIdsData.map(f => f.friend_id);
-    console.log("Found friend IDs:", friendIds);
-
-    // Step 2: Fetch friend user data including 'username'
-    const { data: friendsData, error: usersError } = await supabase
-      .from('users')
-      .select('id, name, username, profile_picture, curr_drop_screentime')
-      .in('id', friendIds);
-
-    if (usersError) {
-      console.error("Error fetching users for friend IDs:", usersError);
-      return res.status(500).json({ error: usersError.message });
-    }
-
-    console.log("Fetched friend user data:", friendsData);
-
-    // Step 3: Sort and format response
-    const sortedFriends = friendsData
-      .sort((a, b) => (a.curr_drop_screentime ?? 0) - (b.curr_drop_screentime ?? 0))
-      .map((user, index) => ({
-        id: user.id,
-        rank: index + 1,
-        name: user.name,
-        username: user.username, // ✅ now included
-        hours: user.curr_drop_screentime,
-        imageName: user.profile_picture,
-      }));
-
-    res.status(200).json(sortedFriends);
-  } catch (err) {
-    console.error("Unexpected error:", err);
-    res.status(500).json({ error: err.message });
+  if (!userId) {
+    return res.status(400).json({ error: 'Missing userId' });
   }
+
+  // Join on friend_id to fetch user metadata
+  const { data, error } = await supabase
+    .from('friends')
+    .select(`
+      friend_id,
+      users:friend_id (
+        id,
+        name,
+        username,
+        profile_picture,
+        curr_drop_screentime
+      )
+    `)
+    .eq('user_id', userId);
+
+  if (error) {
+    console.error("❌ Supabase error:", error);
+    return res.status(400).json({ error: error.message || 'Something went wrong' });
+  }
+
+  // Sort by curr_drop_screentime ascending
+  const sorted = data
+    .filter(entry => entry.users) // Filter out any null user joins
+    .sort((a, b) => (a.users.curr_drop_screentime ?? Infinity) - (b.users.curr_drop_screentime ?? Infinity));
+
+  // Format response
+  const friends = sorted.map(entry => ({
+    id: entry.users.id,
+    name: entry.users.name ?? entry.users.username,
+    username: entry.users.username,
+    hours: entry.users.curr_drop_screentime ?? 0,
+    imageName: entry.users.profile_picture || "defaultProfile"
+  }));
+
+  res.json(friends);
 };
+
 
 
 

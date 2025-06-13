@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 struct FriendRequestsView: View {
     @EnvironmentObject var session: SessionViewModel
 
@@ -37,14 +38,16 @@ struct FriendRequestsView: View {
                                     .font(.custom("Poppins-Bold", size: 20))
                                     .foregroundColor(Color(hex: "F25D29"))
 
-                                Text(request.username)
+                                Text("@\(request.username)")
                                     .font(.custom("Poppins-Regular", size: 16))
                                     .foregroundColor(.gray)
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
 
                             Button(action: {
-                                // approve action here
+                                Task {
+                                    await respondToRequest(senderId: request.sender_id, accept: true)
+                                }
                             }) {
                                 Text("approve")
                                     .font(.custom("Poppins-Regular", size: 12))
@@ -57,7 +60,9 @@ struct FriendRequestsView: View {
                             }
 
                             Button(action: {
-                                // reject action here
+                                Task {
+                                    await respondToRequest(senderId: request.sender_id, accept: false)
+                                }
                             }) {
                                 Image(systemName: "xmark")
                                     .font(.system(size: 18, weight: .medium))
@@ -76,6 +81,40 @@ struct FriendRequestsView: View {
         .background(Color.white.ignoresSafeArea())
         .task {
             await session.loadFriendRequests()
+        }
+    }
+
+    private func respondToRequest(senderId: String, accept: Bool) async {
+        guard !session.userId.isEmpty else { return }
+
+        let endpoint = accept ? "accept" : "decline"
+        guard let url = URL(string: "http://localhost:4000/friends/\(endpoint)") else {
+            print("❌ Invalid \(endpoint) URL")
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let payload: [String: String] = [
+            "sender_id": senderId,
+            "receiver_id": session.userId
+        ]
+
+        do {
+            request.httpBody = try JSONEncoder().encode(payload)
+            let (_, response) = try await URLSession.shared.data(for: request)
+
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                print("✅ Friend request \(accept ? "accepted" : "declined")")
+                await session.loadFriendRequests()
+                await session.fetchFriends(for: session.userId)
+            } else {
+                print("❌ Server error handling friend request")
+            }
+        } catch {
+            print("❌ Error responding to friend request:", error.localizedDescription)
         }
     }
 }

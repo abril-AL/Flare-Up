@@ -61,9 +61,6 @@ struct FocusView: View {
                                             .font(.custom("Poppins-Bold", size: 25))
                                             .foregroundColor(Color(hex: "F25D29"))
                                         
-                                        Text("Abril + 1 others")
-                                            .font(.custom("Poppins-Regular", size: 16))
-                                            .foregroundColor(.gray)
                                     }
                                     
                                     Spacer()

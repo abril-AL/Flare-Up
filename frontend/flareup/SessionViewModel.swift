@@ -32,20 +32,23 @@ struct ScreentimeEntry: Encodable {
 
 struct Friend: Identifiable, Decodable {
     let id: UUID
-    let rank: Int
+    var rank: Int = 0  // Will be set after decoding
     let name: String
-    let username: String // need for friends listing and adding friends / friend requests
+    let username: String
     let hours: Int
     let imageName: String
 }
 
+
 struct FriendRequest: Identifiable, Decodable {
-    let id = UUID()
+    let id = UUID() // This is fine for UI identity
+    let sender_id: String           // Add this!
     let name: String
     let username: String
     let imageName: String
 
     enum CodingKeys: String, CodingKey {
+        case sender_id
         case name
         case username
         case imageName = "profile_picture"
@@ -54,16 +57,16 @@ struct FriendRequest: Identifiable, Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
+        self.sender_id = try container.decode(String.self, forKey: .sender_id)
+        
         let usernameRaw = try container.decode(String.self, forKey: .username)
         let cleanedUsername = usernameRaw.replacingOccurrences(of: "@", with: "")
-        let name = try container.decodeIfPresent(String.self, forKey: .name) ?? cleanedUsername
-        let imageName = try container.decode(String.self, forKey: .imageName)
-
+        self.name = try container.decodeIfPresent(String.self, forKey: .name) ?? cleanedUsername
         self.username = usernameRaw
-        self.name = name
-        self.imageName = imageName
+        self.imageName = try container.decode(String.self, forKey: .imageName)
     }
 }
+
 
 
 struct UserProfile: Decodable {
@@ -99,6 +102,10 @@ class SessionViewModel: ObservableObject {
     init() {
         Task {
             await loadSession()
+            
+            if !storedUserId.isEmpty {
+                await loadUserProfile()
+            }
         }
     }
     
@@ -297,13 +304,17 @@ class SessionViewModel: ObservableObject {
         do {
             try await SupabaseManager.shared.signIn(email: email, password: password)
             let session = try await SupabaseManager.shared.getSession()
+
             await MainActor.run {
                 self.isAuthenticated = true
                 self.storedUserId = session.user.id.uuidString
                 self.authToken = session.accessToken
             }
+
+            // Load friends and user profile after login
             await fetchFriends(for: session.user.id.uuidString)
             await loadUserProfile()
+
         } catch {
             await MainActor.run {
                 self.isAuthenticated = false
@@ -315,6 +326,7 @@ class SessionViewModel: ObservableObject {
         }
     }
 
+
     func signUp(email: String, password: String) async throws {
         do {
             try await SupabaseManager.shared.signUp(email: email, password: password)
@@ -325,6 +337,7 @@ class SessionViewModel: ObservableObject {
                 self.authToken = session.accessToken
             }
             await fetchFriends(for: session.user.id.uuidString)
+            await loadUserProfile()
         } catch {
             await MainActor.run {
                 self.isAuthenticated = false
@@ -351,7 +364,7 @@ class SessionViewModel: ObservableObject {
         }
     }
 
-    private func fetchFriends(for userID: String) async {
+    func fetchFriends(for userID: String) async {
         guard let url = URL(string: "http://localhost:4000/friends/ranked/\(userID)") else {
             print("Invalid friends URL")
             return
@@ -359,16 +372,26 @@ class SessionViewModel: ObservableObject {
 
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            let decoded = try JSONDecoder().decode([Friend].self, from: data)
+            
+            var decoded = try JSONDecoder().decode([Friend].self, from: data)
+
+            // Assign rank based on order (lowest hours = best rank)
+            for (index, friend) in decoded.enumerated() {
+                decoded[index].rank = index + 1
+            }
+
             self.friends = decoded
+
             print("📱 Friends List:")
             for friend in decoded {
-                print("• \(friend.name) (@\(friend.username)) – \(friend.hours) hours")
+                print("🏅 Rank \(friend.rank): \(friend.name) (@\(friend.username)) – \(friend.hours) hours")
             }
+
         } catch {
             print("Failed to fetch friends: \(error.localizedDescription)")
         }
     }
+
 
     func processImage(_ image: UIImage) async {
         guard let cgImage = image.cgImage else {
