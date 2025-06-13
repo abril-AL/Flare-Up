@@ -26,8 +26,7 @@ app.use('/flares', require('./routes/flares'));
 const screentimeRoutes = require('./routes/screentimeRoutes');
 const dropsRoutes = require('./routes/dropsRoutes');
 // app.use("/drops", require("./routes/drops"));
-
-//app.use('/groups', require('./routes/groups'));
+app.use('/groups', require('./routes/groups'));
 
 app.use('/screentime', screentimeRoutes);
 app.use('/drops', dropsRoutes);

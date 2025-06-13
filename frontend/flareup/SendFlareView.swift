@@ -169,7 +169,6 @@ struct SendFlareView: View {
                             }
                             
                             await session.loadOutgoingFlares()
-                            
                             navigateToFocus = true
                         }
                     }) {

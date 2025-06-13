@@ -101,7 +101,7 @@ exports.getUserGroups = async (req, res) => {
 
     const { data, error } = await supabase
       .from('group_memberships')
-      .select('group_id, groups:group_id (id, name)')
+      .select('group_id, groups:group_id (id, name, wager)')
       .eq('user_id', user_id);
 
     if (error) return res.status(400).json({ error: error.message });
@@ -112,6 +112,56 @@ exports.getUserGroups = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// Get groups a user is in, with name + member profile pictures
+exports.getUserGroupDetails = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+
+    // Step 1: Get the groups the user is a member of
+    const { data: memberships, error: membershipError } = await supabase
+      .from('group_memberships')
+      .select('group_id, groups:group_id (id, name)')
+      .eq('user_id', user_id);
+
+    if (membershipError) {
+      console.error("❌ Membership fetch error:", membershipError);
+      return res.status(400).json({ error: membershipError.message });
+    }
+
+    const groupList = [];
+
+    for (const membership of memberships) {
+      const group = membership.groups;
+
+      // Step 2: Fetch members' profile pictures for this group
+      const { data: members, error: memberError } = await supabase
+        .from('group_memberships')
+        .select('users:user_id (profile_picture)')
+        .eq('group_id', group.id);
+
+      if (memberError) {
+        console.error("❌ Member fetch error:", memberError);
+        return res.status(400).json({ error: memberError.message });
+      }
+
+      const memberPics = members.map(entry => entry.users?.profile_picture || 'defaultProfile');
+
+      groupList.push({
+        id: group.id,
+        name: group.name,
+        members: memberPics
+      });
+    }
+
+    return res.json({ groups: groupList });
+  } catch (err) {
+    console.error('❌ Exception:', err);
+    return res.status(500).json({ error: err.message || 'Something went wrong' });
+  }
+};
+
+
 
 // Get all members of a group
 exports.getGroupMembers = async (req, res) => {

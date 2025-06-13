@@ -112,7 +112,8 @@ struct AllFriendsView: View {
     }
 }
 
-#Preview {
+/**#Preview {
     AllFriendsView()
         .environmentObject(SessionViewModel.mock)
-}
+} */
+

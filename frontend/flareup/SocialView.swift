@@ -88,8 +88,8 @@ struct SocialView: View {
                         .padding(.horizontal)
                         
                         VStack(spacing: 16) {
-                            ForEach(groupSampleData, id: \.id) { group in
-                                NavigationLink(destination: GroupDetailView(group: group)) {
+                            ForEach(session.groups, id: \.id) { group in
+                                NavigationLink(destination: GroupDetailView(group: group).environmentObject(session)) {
                                     HStack(spacing: 10) {
                                         HStack(spacing: -25) {
                                             ForEach(group.members.prefix(3), id: \.self) { member in
@@ -133,8 +133,7 @@ struct SocialView: View {
     }
 }
 
-struct GroupModel: Identifiable {
-    let id = UUID()
+/**struct GroupModel: Identifiable {
     let name: String
     let members: [String] // image names
 }
@@ -143,9 +142,9 @@ let groupSampleData = [
     GroupModel(name: "The Chuzz", members: ["abrilPic", "daltonPic", "richellePic"]),
     GroupModel(name: "HCI 4 Lyfe", members: ["emjunPic", "abrilPic", "profilePic"]),
     GroupModel(name: "CS188TAS", members: ["emjunPic", "olliePic", "hangerPic"])
-]
-
-#Preview {
+] */
+ 
+/**#Preview {
     SocialView()
         .environmentObject(SessionViewModel.mock)
 }
@@ -163,4 +162,4 @@ extension SessionViewModel {
         ]
         return vm
     }
-}
+} */

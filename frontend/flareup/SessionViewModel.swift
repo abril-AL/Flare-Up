@@ -22,6 +22,26 @@ struct OutgoingFlare: Identifiable, Decodable {
     }
 }
 
+struct GroupModel: Identifiable, Decodable {
+    let id: UUID
+    let name: String
+    let members: [String]
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case members
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(UUID.self, forKey: .id)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.members = try container.decode([String].self, forKey: .members)
+    }
+}
+
+
 
 struct ScreentimeEntry: Encodable {
     let user_id: String
@@ -32,12 +52,36 @@ struct ScreentimeEntry: Encodable {
 
 struct Friend: Identifiable, Decodable {
     let id: UUID
-    var rank: Int = 0  // Will be set after decoding
     let name: String
     let username: String
     let hours: Int
     let imageName: String
+    var rank: Int = 0  // Added default value
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, username, hours, imageName
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        username = try container.decode(String.self, forKey: .username)
+        hours = try container.decodeIfPresent(Int.self, forKey: .hours) ?? 0
+        imageName = try container.decodeIfPresent(String.self, forKey: .imageName) ?? "defaultProfile"
+    }
+
+    init(id: UUID, name: String, username: String, hours: Int, imageName: String, rank: Int) {
+        self.id = id
+        self.name = name
+        self.username = username
+        self.hours = hours
+        self.imageName = imageName
+        self.rank = rank
+    }
 }
+
+
 
 
 struct FriendRequest: Identifiable, Decodable {
@@ -88,6 +132,7 @@ class SessionViewModel: ObservableObject {
     @Published var incomingRequests: [FriendRequest] = []
     @Published var outgoingFlares: [OutgoingFlare] = []
     @Published var incomingFlares: [IncomingFlare] = []
+    @Published var groups: [GroupModel] = []
 
 
     @AppStorage("userId") private var storedUserId: String = ""
@@ -108,6 +153,40 @@ class SessionViewModel: ObservableObject {
             }
         }
     }
+    
+    @MainActor
+    func fetchGroupDetails() async {
+        guard !userId.isEmpty else {
+            print("⚠️ No user ID")
+            return
+        }
+
+        guard let url = URL(string: "http://localhost:4000/groups/user/\(userId)/details") else {
+            print("❌ Invalid group details URL")
+            return
+        }
+
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("📦 Group details JSON:\n\(jsonString)")
+            }
+
+            struct Response: Decodable {
+                let groups: [GroupModel]
+            }
+
+            let decoded = try JSONDecoder().decode(Response.self, from: data)
+
+            self.groups = decoded.groups
+            print("✅ Loaded \(decoded.groups.count) groups")
+
+        } catch {
+            print("❌ Failed to fetch group details:", error.localizedDescription)
+        }
+    }
+
     
     @MainActor
     func loadIncomingFlares() async {
@@ -238,6 +317,7 @@ class SessionViewModel: ObservableObject {
                 self.authToken = session.accessToken
             }
             await fetchFriends(for: session.user.id.uuidString)
+            await fetchGroupDetails()
         } catch {
             await MainActor.run {
                 self.isAuthenticated = false
@@ -364,33 +444,41 @@ class SessionViewModel: ObservableObject {
         }
     }
 
-    func fetchFriends(for userID: String) async {
-        guard let url = URL(string: "http://localhost:4000/friends/ranked/\(userID)") else {
-            print("Invalid friends URL")
+    @MainActor
+    func fetchFriends(for userId: String) async {
+        guard let url = URL(string: "http://localhost:4000/friends/ranked/\(userId)") else {
+            print("❌ Invalid URL")
             return
         }
 
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            
-            var decoded = try JSONDecoder().decode([Friend].self, from: data)
+            print("📦 Raw JSON:", String(data: data, encoding: .utf8) ?? "nil")
 
-            // Assign rank based on order (lowest hours = best rank)
-            for (index, friend) in decoded.enumerated() {
-                decoded[index].rank = index + 1
+            var decodedFriends = try JSONDecoder().decode([Friend].self, from: data)
+
+            // Compute rank by sorting ascending by hours
+            decodedFriends.sort { $0.hours < $1.hours }
+            for (index, friend) in decodedFriends.enumerated() {
+                decodedFriends[index] = Friend(
+                    id: friend.id,
+                    name: friend.name,
+                    username: friend.username,
+                    hours: friend.hours,
+                    imageName: friend.imageName,
+                    rank: index + 1
+                )
             }
 
-            self.friends = decoded
-
-            print("📱 Friends List:")
-            for friend in decoded {
-                print("🏅 Rank \(friend.rank): \(friend.name) (@\(friend.username)) – \(friend.hours) hours")
-            }
+            self.friends = decodedFriends
+            print("✅ Friends loaded with ranks")
 
         } catch {
-            print("Failed to fetch friends: \(error.localizedDescription)")
+            print("❌ Failed to fetch friends: \(error.localizedDescription)")
         }
     }
+
+
 
 
     func processImage(_ image: UIImage) async {

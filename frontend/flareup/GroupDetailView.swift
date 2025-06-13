@@ -2,7 +2,52 @@ import SwiftUI
 
 struct GroupDetailView: View {
     let group: GroupModel
+    @EnvironmentObject var session: SessionViewModel
     @State private var isFlareToggled = false
+
+    func sendFlare(from senderId: String, to recipientId: String, status: String, note: String?) async {
+        guard let url = URL(string: "http://localhost:4000/flares/") else {
+            print("❌ Invalid URL")
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let payload: [String: Any] = [
+            "sender_id": senderId,
+            "recipient_id": recipientId,
+            "status": status,
+            "note": note ?? ""
+        ]
+
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: payload)
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 201 {
+                print("❌ Failed to send flare:", String(data: data, encoding: .utf8) ?? "Unknown error")
+            } else {
+                print("✅ Flare sent to \(recipientId)")
+            }
+        } catch {
+            print("❌ Error sending flare:", error.localizedDescription)
+        }
+    }
+
+    func flareAllGroupMembers() async {
+        for member in group.members {
+            if let recipient = session.friends.first(where: { $0.imageName == member }) {
+                let recipientId = recipient.id.uuidString
+                await sendFlare(from: session.userId, to: recipientId, status: "locked in", note: nil)
+            }
+        }
+
+        await MainActor.run {
+            isFlareToggled = true
+        }
+    }
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -21,7 +66,9 @@ struct GroupDetailView: View {
                         Spacer()
 
                         Button(action: {
-                            isFlareToggled = true
+                            Task {
+                                await flareAllGroupMembers()
+                            }
                         }) {
                             Image(systemName: "exclamationmark.circle.fill")
                                 .font(.system(size: 35, weight: .bold))
@@ -43,7 +90,6 @@ struct GroupDetailView: View {
                         .padding(.trailing, 20)
                     }
 
-                    // Drop Summary Card
                     VStack(alignment: .leading, spacing: 6) {
                         HStack {
                             Text("Latest \(group.name) Drop")
@@ -74,7 +120,7 @@ struct GroupDetailView: View {
                             Text("Wager")
                                 .foregroundColor(.green)
                                 .font(.custom("Poppins-Bold", size: 18))
-                            Text(mockGroupWager[group.name] ?? "Dinner")
+                            Text(mockGroupWager[group.name] ?? "")
                                 .foregroundColor(.gray)
                                 .font(.custom("Poppins-Bold", size: 18))
                                 .underline()
@@ -96,7 +142,6 @@ struct GroupDetailView: View {
                     .shadow(radius: 3)
                     .padding(.horizontal)
 
-                    // Members section
                     HStack {
                         Text("members")
                             .font(.custom("Poppins-Bold", size: 26))
@@ -159,7 +204,6 @@ struct GroupDetailView: View {
                 .background(Color.white)
             }
 
-            // Fixed FlareUp header
             FlareupHeader {}
 
             if isFlareToggled {
