@@ -15,6 +15,12 @@ exports.sendFriendRequest = async (req, res) => {
 
     if (error){ 
       console.error('Supabase error:', error);
+
+        // 23505 is the PostgreSQL error code for unique constraint violation
+      if (error.code === '23505') {
+       return res.status(409).json({ error: 'Friend request already sent' });
+    }
+
       return res.status(400).json({ error: error.message || 'Something went wrong' });
     }
 
@@ -137,14 +143,31 @@ exports.getFriendRequests = async (req, res) => {
       return res.status(400).json({ error: 'Missing user_id' });
     }
 
+    // Join on sender_id -> users
     const { data, error } = await supabase
       .from('friend_requests')
-      .select('sender_id, users:sender_id (id, email, current_streak, current_screen_time)')
+      .select(`
+        sender_id,
+        users:sender_id (
+          id,
+          name,
+          username,
+          profile_picture
+        )
+      `)
       .eq('receiver_id', user_id);
 
-    if (error) return res.status(400).json({ error: error.message || 'Something went wrong' });
+    if (error) {
+      console.error("Supabase query error:", error);
+      return res.status(400).json({ error: error.message || 'Something went wrong' });
+    }
 
-    const requests = data.map(entry => entry.users);
+    // Format the results into the SwiftUI `FriendRequest` shape
+    const requests = data.map(entry => ({
+      name: entry.users.name,
+      username: `@${entry.users.username}`, // match your dummy data format
+      imageName: entry.users.profile_picture || "defaultProfile" // fallback in case it's null
+    }));
 
     res.json({ requests });
   } catch (err) {
@@ -152,6 +175,7 @@ exports.getFriendRequests = async (req, res) => {
     res.status(500).json({ error: err.message || 'Something went wrong' });
   }
 };
+
 
 // controllers/friendsController.js
 exports.getRankedFriends = async (req, res) => {

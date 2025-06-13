@@ -78,3 +78,24 @@ exports.signup = async (req, res) => {
     res.status(500).json({ error: err.message || 'Something went wrong during signup' });
   }
 };
+
+exports.getUserIdByUsername = async (req, res) => {
+  const { username } = req.params;
+
+  if (!username) {
+    return res.status(400).json({ error: 'Missing username' });
+  }
+
+  const { data, error } = await supabase
+    .from('users')
+    .select('id')
+    .eq('username', username)
+    .single(); // because usernames are unique
+
+  if (error || !data) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  res.json({ id: data.id });
+};
+
