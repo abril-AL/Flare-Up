@@ -22,6 +22,10 @@ struct OutgoingFlare: Identifiable, Decodable {
     }
 }
 
+struct IncomingFlareResponse: Decodable {
+    let flares: [IncomingFlare]
+}
+
 struct GroupModel: Identifiable, Decodable {
     let id: UUID
     let name: String
@@ -210,14 +214,15 @@ class SessionViewModel: ObservableObject {
                 return
             }
 
-            let decoded = try JSONDecoder().decode([IncomingFlare].self, from: data)
-            self.incomingFlares = decoded
-            print("✅ Fetched \(decoded.count) incoming flares")
+            let decodedResponse = try JSONDecoder().decode(IncomingFlareResponse.self, from: data)
+            self.incomingFlares = decodedResponse.flares
+            print("✅ Fetched \(decodedResponse.flares.count) incoming flares")
 
         } catch {
             print("❌ Failed to load incoming flares:", error.localizedDescription)
         }
     }
+
 
     
     func loadFriendRequests() async {
@@ -394,6 +399,7 @@ class SessionViewModel: ObservableObject {
             // Load friends and user profile after login
             await fetchFriends(for: session.user.id.uuidString)
             await loadUserProfile()
+            await fetchGroupDetails()
 
         } catch {
             await MainActor.run {
@@ -418,6 +424,7 @@ class SessionViewModel: ObservableObject {
             }
             await fetchFriends(for: session.user.id.uuidString)
             await loadUserProfile()
+            await fetchGroupDetails()
         } catch {
             await MainActor.run {
                 self.isAuthenticated = false
