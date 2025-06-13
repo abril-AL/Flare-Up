@@ -28,6 +28,8 @@ Existing screen time tools are private & passive, so they don’t tap into the m
 
 # Usage
 
+NOTE: PLEASE USE THE LATEST STABLE BRANCH RELEASE ON THE BRANCH "lastminutedebug". Thank you very much :)
+
 To start the supabase backend server:
 ```
 cd ./backend
