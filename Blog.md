@@ -183,16 +183,44 @@ Shared Components & Utilities
 - **`ViewExtension.swift`**  
     Utility for applying rounded corners to specific sides of views.
 
-### Evaluation question, methods, and analysis approach
 
+## Evaluation Methods
 
-### Findings
+To test the usability of our app and gather feedback, we began by conducting initial evaluations with 2 individuals. These participants explored the prototype and our hard-coded layout without any prior context or walkthrough. After their initial interaction, we answered any questions they had and then asked them whether the walkthrough or explanations made navigation easier. We encouraged them to re-engage with the app and provide any additional comments or feedback.
 
+Once a foundational version of the app was implemented, we extended usability testing to 12 more participants, following a similar protocol.
 
-### Discussion of your takeaways based on the evaluation, limitations and future work, mistakes and lessons learned
+## Analysis Approach
 
+After the initial round of usability testing, we realized that certain features—such as *drops*—required clearer explanations. Initially, we emphasized the *Friends* component of the app, but user feedback highlighted the importance of the *Groups* feature instead. As a result, we redirected our focus toward refining the Groups functionality.
 
-### What new questions do you have based on your evaluation? 
+In our second round of testing, we were relieved to receive more positive feedback. Users demonstrated a better baseline understanding of the app’s purpose and navigation, even with minimal information. Many participants shared that they would feel motivated to use the app and found its features engaging.
 
+## Evaluation Questions
 
-### At least 2 figures, including one of your system!
+- Would FlareUp be motivating enough to reduce users' screen time?
+- Are social features (e.g., flares, group wagers) easy to navigate?
+- Are users comfortable sharing their data?
+- Which features are most engaging, and why?
+
+## Incorporating Feedback
+
+Given the complexity of implementation in Swift, we were concerned about completing all intended features within our timeline. On the advice of our mentors, we narrowed our scope to focus on one complete scenario. We prioritized:
+
+- The ability to input screen time  
+- Sending out a drop on Friday  
+- Sending flares to others  
+
+These core functions were completed in time for our final demo.
+
+## Findings
+
+Users reported that the app was satisfying to use and aesthetically pleasing. Many enjoyed the core concept of FlareUp. However, manual input of screen time emerged as a major barrier to adoption. Users noted that this step felt tedious and could discourage continued use.
+
+## Discussion, Limitations, and Future Work
+
+Initially, our team was focused on self-learning tools, and we felt fairly confident in pursuing ideas in that space. However, midway through the quarter, we pivoted to developing a gamified productivity app. This change felt daunting, especially with an upcoming critique presentation, but we quickly aligned and were able to deliver a strong presentation and supporting materials.
+
+One major roadblock was discovering that accessing private Screen Time data on iOS requires an Apple Developer account, which costs $100 per year. This limitation forced us to settle for manual screen time entry. While we still implemented a working screen-time-based leaderboard, the manual input method proved to be a significant usability challenge during evaluation.
+
+Going forward, we hope to refine the app by subscribing to Apple’s Developer Program and incorporating automated screen time retrieval. This improvement would significantly reduce friction for users and unlock the full potential of our app.
